@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
  * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
-@Api(description = "用户接口")
+@Api("用户接口")
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -145,7 +145,7 @@ public class UserController {
      * @param request
      * @return
      */
-    @GetMapping("/get/login")
+    @GetMapping("/currentUser")
     public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
         User user = userService.getLoginUser(request);
         return ResultUtils.success(userService.getLoginUserVO(user));
