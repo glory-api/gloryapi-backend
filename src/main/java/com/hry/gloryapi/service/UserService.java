@@ -80,6 +80,14 @@ public interface UserService extends IService<User> {
     boolean isAdmin(User user);
 
     /**
+     * 是否被封禁用户
+     *
+     * @param user
+     * @return
+     */
+    boolean isBan(User user);
+
+    /**
      * 用户注销
      *
      * @param request

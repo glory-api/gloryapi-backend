@@ -105,6 +105,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             log.info("user login failed, userAccount cannot match userPassword");
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
+        //用户被禁用
+        if (isBan(user)){
+            log.info("user login failed, userAccount is Disabled");
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "用户被禁用");
+        }
         // 3. 记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, user);
         return this.getLoginUserVO(user);
@@ -201,6 +206,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean isAdmin(User user) {
         return user != null && UserRoleEnum.ADMIN.getValue().equals(user.getUserRole());
+    }
+
+    @Override
+    public boolean isBan(User user) {
+        return user != null && UserRoleEnum.BAN.getValue().equals(user.getUserRole());
     }
 
     /**
