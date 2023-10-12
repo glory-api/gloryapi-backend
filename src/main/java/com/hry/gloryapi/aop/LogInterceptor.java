@@ -25,7 +25,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LogInterceptor {
 
     /**
-     * 执行拦截
+     * 利用AOP执行拦截，计算接收请求到返回请求的时间
      */
     @Around("execution(* com.hry.gloryapi.controller.*.*(..))")
     public Object doInterceptor(ProceedingJoinPoint point) throws Throwable {

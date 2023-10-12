@@ -8,7 +8,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 /**
  * Knife4j 接口文档配置
@@ -17,9 +17,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
  * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
+
 @Configuration
-@EnableSwagger2
-@Profile({"dev", "test"})
+@EnableSwagger2WebMvc
+@Profile({"dev","test"})//用于指定什么时候生效
 public class Knife4jConfig {
 
     @Bean

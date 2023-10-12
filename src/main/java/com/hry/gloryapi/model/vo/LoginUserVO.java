@@ -2,6 +2,8 @@ package com.hry.gloryapi.model.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**

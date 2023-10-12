@@ -7,7 +7,7 @@ spring:
   # 默认 dev 环境
   profiles:
     active: dev
-  # 支持 swagger3
+  # 支持 swagger3（springfox）
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -42,6 +42,8 @@ spring:
     multipart:
       # 大小限制
       max-file-size: 10MB
+  freemarker:
+    check-template-location: false
 server:
   address: 0.0.0.0
   port: 9001
