@@ -44,7 +44,7 @@ public class FileController {
      * 文件上传
      *
      * @param multipartFile
-     * @param uploadFileRequest
+     * @param uploadFileRequest //说明上传的什么文件（结合业务，比如上传用户头像 参数需要是user_avatar；根据该值区分校验不同文件规则）
      * @param request
      * @return
      */

@@ -25,6 +25,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hry.gloryapi.utils.UserContext;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
@@ -311,5 +312,13 @@ public class UserController {
         boolean result = userService.updateById(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+    @GetMapping("/test")
+    public BaseResponse<String> test(){
+        System.out.println("2");
+        String userName1 = UserContext.getLoginUser().getUserName();
+        String userName2 = UserContext.getLoginUser().getUserName();
+        return ResultUtils.success(userName1);
     }
 }
