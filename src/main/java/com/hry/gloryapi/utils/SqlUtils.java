@@ -15,7 +15,7 @@ public class SqlUtils {
      * 校验排序字段是否合法（防止 SQL 注入）
      *
      * @param sortField
-     * @return true 合法  false 不合法
+     * @return true 合法  false 不合法或为null
      */
     public static boolean validSortField(String sortField) {
         if (StringUtils.isBlank(sortField)) {

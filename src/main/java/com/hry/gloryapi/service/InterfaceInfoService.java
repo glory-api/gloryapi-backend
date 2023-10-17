@@ -7,8 +7,6 @@ import com.hry.gloryapi.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.hry.gloryapi.model.entity.InterfaceInfo;
 import com.hry.gloryapi.model.vo.InterfaceInfoVo;
 
-import java.util.List;
-
 /**
 * @author lenovo
 * @description 针对表【interface_info(接口信息)】的数据库操作Service
@@ -35,4 +33,11 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      * @return
      */
     Page<InterfaceInfoVo> pagetoPageVo(Page<InterfaceInfo> page);
+
+    /**
+     * 实体类转VO
+     * @param interfaceInfo
+     * @return
+     */
+    InterfaceInfoVo toInterfaceInfoVo(InterfaceInfo interfaceInfo);
 }

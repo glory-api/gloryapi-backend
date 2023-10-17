@@ -1,14 +1,14 @@
-package com.hry.gloryapi.model.po;
+package com.hry.gloryapi.model.vo;
 
 import lombok.Data;
 
 /**
- * 接口信息的请求参数信息
+ * 接口信息的响应参数信息
  * @author: huangry
  * @create: 2023/10/13
  **/
 @Data
-public class RequestParams {
+public class InterfaceResponseParam {
     /**
      * 参数名称
      */
@@ -23,10 +23,5 @@ public class RequestParams {
      * 描述
      */
     private String description;
-
-    /**
-     * 是否必须 0-否 1-是
-     */
-    private int isRequired;
 
 }

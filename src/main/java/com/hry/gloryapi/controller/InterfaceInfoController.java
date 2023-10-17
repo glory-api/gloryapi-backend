@@ -10,6 +10,7 @@ import com.hry.gloryapi.common.ResultUtils;
 import com.hry.gloryapi.constant.UserConstant;
 import com.hry.gloryapi.exception.BusinessException;
 import com.hry.gloryapi.exception.ThrowUtils;
+import com.hry.gloryapi.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.hry.gloryapi.model.dto.post.PostAddRequest;
 import com.hry.gloryapi.model.dto.post.PostEditRequest;
@@ -41,19 +42,17 @@ import java.util.List;
 @RequestMapping("/interface")
 @Slf4j
 public class InterfaceInfoController {
+    private static final Gson GSON = new Gson();
 
     @Resource
     private InterfaceInfoService interfaceInfoService;
-
     @Resource
     private UserService userService;
 
-    private final static Gson GSON = new Gson();
-
-//    @PostMapping("/add")
-//    public BaseResponse<Long> addInterfaceInfo(@RequestBody ){
-//
-//    }
+    @PostMapping("/add")
+    public BaseResponse<Long> addInterfaceInfo(@RequestBody InterfaceInfoAddRequest interfaceInfoAddRequest){
+        return ResultUtils.success(1L);
+    }
 
     /**
      * 分页获取接口信息
@@ -67,7 +66,6 @@ public class InterfaceInfoController {
         }
         return ResultUtils.success(interfaceInfoService.listInterfaceInfoVoByPage(interfaceInfoQueryRequest));
     }
-
 
 
 
