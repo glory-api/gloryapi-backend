@@ -13,7 +13,7 @@ import java.util.List;
  * @author: huangry
  * @create: 2023/10/13
  **/
-@Configuration
+//@Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Resource
     private LoginInterceptor loginInterceptor;
@@ -23,6 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     static {
         excludePath.add("/user/login");
         excludePath.add("/user/register");
+        excludePath.add("/error");
         excludePath.add("/swagger-resources");
         excludePath.add("/swagger-resources/configuration/ui");
         excludePath.add("/v2/api-docs");

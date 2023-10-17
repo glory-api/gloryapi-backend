@@ -1,6 +1,8 @@
 package com.hry.gloryapi.common;
 
 import java.io.Serializable;
+
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -12,11 +14,11 @@ import lombok.Data;
  */
 @Data
 public class BaseResponse<T> implements Serializable {
-
+    @ApiModelProperty("错误码")
     private int code;
-
+    @ApiModelProperty("响应数据")
     private T data;
-
+    @ApiModelProperty("响应信息")
     private String message;
 
     public BaseResponse(int code, T data, String message) {

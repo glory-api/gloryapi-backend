@@ -7,6 +7,10 @@ import com.hry.gloryapi.model.vo.InterfaceResponseParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +28,8 @@ public class InterfaceInfoAddRequest implements Serializable {
     /**
      * 名称
      */
-    @ApiModelProperty("名称")
+    @ApiModelProperty(value = "名称",required = true)
+    @NotBlank(message = "接口名称不能为空")
     private String name;
 
     /**
@@ -36,7 +41,8 @@ public class InterfaceInfoAddRequest implements Serializable {
     /**
      * 接口地址
      */
-    @ApiModelProperty("接口地址")
+    @ApiModelProperty(value = "接口地址",required = true)
+    @NotBlank(message = "接口地址不能为空")
     private String url;
 
     /**
@@ -54,7 +60,9 @@ public class InterfaceInfoAddRequest implements Serializable {
     /**
      * 响应参数
      */
-    @ApiModelProperty("响应参数")
+    @ApiModelProperty(value = "响应参数",required = true)
+    @Valid
+    @NotEmpty(message = "响应参数不能为空")
     private List<InterfaceResponseParam> responseParams;
 
     /**
@@ -67,7 +75,8 @@ public class InterfaceInfoAddRequest implements Serializable {
     /**
      * 请求类型
      */
-    @ApiModelProperty("请求类型")
+    @ApiModelProperty(value = "请求类型",required = true)
+    @NotBlank(message = "请求类型不能为空")
     private String method;
 
 

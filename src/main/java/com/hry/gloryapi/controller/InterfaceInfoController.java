@@ -26,6 +26,7 @@ import com.hry.gloryapi.service.PostService;
 import com.hry.gloryapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -50,7 +51,7 @@ public class InterfaceInfoController {
     private UserService userService;
 
     @PostMapping("/add")
-    public BaseResponse<Long> addInterfaceInfo(@RequestBody InterfaceInfoAddRequest interfaceInfoAddRequest){
+    public BaseResponse<Long> addInterfaceInfo(@Validated @RequestBody InterfaceInfoAddRequest interfaceInfoAddRequest){
         return ResultUtils.success(1L);
     }
 
