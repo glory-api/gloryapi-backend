@@ -3,7 +3,7 @@ package com.hry.gloryapi.backend.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hry.gloryapi.backend.annotation.AuthCheck;
 import com.hry.gloryapi.backend.common.BaseResponse;
-import com.hry.gloryapi.backend.common.DeleteRequest;
+import com.hry.gloryapi.backend.common.IdRequest;
 import com.hry.gloryapi.backend.common.ErrorCode;
 import com.hry.gloryapi.backend.common.ResultUtils;
 import com.hry.gloryapi.backend.constant.UserConstant;
@@ -67,7 +67,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+//    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -180,17 +180,17 @@ public class UserController {
     /**
      * 删除用户
      *
-     * @param deleteRequest
+     * @param idRequest
      * @param request
      * @return
      */
     @PostMapping("/delete")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> deleteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
-        if (deleteRequest == null || deleteRequest.getId() <= 0) {
+    public BaseResponse<Boolean> deleteUser(@RequestBody IdRequest idRequest, HttpServletRequest request) {
+        if (idRequest == null || idRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        boolean b = userService.removeById(deleteRequest.getId());
+        boolean b = userService.removeById(idRequest.getId());
         return ResultUtils.success(b);
     }
 

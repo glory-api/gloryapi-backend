@@ -7,9 +7,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.hry.gloryapi.backend.common.ErrorCode;
+import com.hry.gloryapi.backend.common.IdRequest;
 import com.hry.gloryapi.backend.common.PageResponse;
+import com.hry.gloryapi.backend.exception.BusinessException;
+import com.hry.gloryapi.backend.exception.ThrowUtils;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
+import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.hry.gloryapi.backend.model.entity.InterfaceInfo;
 import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.backend.model.vo.InterfaceRequestParam;
@@ -20,6 +25,8 @@ import com.hry.gloryapi.backend.utils.UserContext;
 import com.hry.gloryapi.backend.constant.CommonConstant;
 import com.hry.gloryapi.backend.mapper.InterfaceInfoMapper;
 
+import io.swagger.models.auth.In;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -35,6 +42,7 @@ import java.util.stream.Collectors;
  * @createDate 2023-10-13 14:52:34
  */
 @Service
+@Slf4j
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo> implements InterfaceInfoService {
     private static final Gson GSON = new Gson();
 
@@ -58,6 +66,53 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         interfaceInfo.setUserid(UserContext.getLoginUser().getId());
         interfaceInfoMapper.insert(interfaceInfo);
         return interfaceInfo.getId();
+    }
+
+    @Override
+    public int updateStatus(IdRequest idRequest) {
+        //检验接口是否存在
+        InterfaceInfo interfaceInfo = interfaceInfoMapper.selectById(idRequest.getId());
+        if(Objects.isNull(interfaceInfo)){
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        //发布接口 要测试接口
+        if(interfaceInfo.getStatus() == 0){
+            // TODO: 2023/10/24 调用接口
+            interfaceInfo.setStatus(1);
+            log.info("{}接口发布",interfaceInfo.getId());
+        }else {
+            interfaceInfo.setStatus(0);
+            log.info("{}接口下线",interfaceInfo.getId());
+        }
+
+        int result = interfaceInfoMapper.updateById(interfaceInfo);
+        ThrowUtils.throwIf(result<=0,ErrorCode.SYSTEM_ERROR,"更新状态失败，数据库错误");
+        return result;
+    }
+
+    @Override
+    public int updateInterfaceInfo(InterfaceInfoUpdateRequest interfaceInfoUpdateRequest) {
+        InterfaceInfo oldInterfaceInfo = interfaceInfoMapper.selectById(interfaceInfoUpdateRequest.getId());
+        ThrowUtils.throwIf(Objects.isNull(oldInterfaceInfo),ErrorCode.NOT_FOUND_ERROR);
+        InterfaceInfo newInterfaceInfo = new InterfaceInfo();
+        BeanUtil.copyProperties(interfaceInfoUpdateRequest, newInterfaceInfo, "requestParams", "responseParams");
+        newInterfaceInfo.setRequestParams(GSON.toJson(interfaceInfoUpdateRequest.getRequestParams(),new TypeToken<List<InterfaceRequestParam>>() {}.getType()));
+        newInterfaceInfo.setResponseParams(GSON.toJson(interfaceInfoUpdateRequest.getResponseParams(),new TypeToken<List<InterfaceRequestParam>>() {}.getType()));
+        int result = interfaceInfoMapper.updateById(newInterfaceInfo);
+        ThrowUtils.throwIf(result<=0,ErrorCode.SYSTEM_ERROR,"更新接口信息失败，数据库错误");
+        return result;
+    }
+
+    @Override
+    public int deleteIntefaceInfo(IdRequest idRequest) {
+        InterfaceInfo interfaceInfo = interfaceInfoMapper.selectById(idRequest.getId());
+        ThrowUtils.throwIf(Objects.isNull(interfaceInfo),ErrorCode.NOT_FOUND_ERROR);
+        if(interfaceInfo.getIsDelete() == 0){
+            int result = interfaceInfoMapper.deleteById(idRequest.getId());
+            ThrowUtils.throwIf(result<=0,ErrorCode.SYSTEM_ERROR,"删除接口信息失败，数据库错误");
+            return result;
+        }
+        return 0;
     }
 
     @Override

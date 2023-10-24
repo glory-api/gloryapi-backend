@@ -30,7 +30,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 @Aspect
 @Component
-@Order(0)//切面类顺序 越小越先执行
+@Order(1)//切面类顺序 越小越先执行
 public class AuthInterceptor {
 
     @Resource
@@ -56,7 +56,7 @@ public class AuthInterceptor {
             //判断权限注解中是否写了非法权限（例如写了不存在的权限）
             UserRoleEnum mustUserRoleEnum = UserRoleEnum.getEnumByValue(mustRole);
             if (mustUserRoleEnum == null) {
-                log.warn("权限定义不合法 无[{}]权限定义",mustRole);
+                log.error("权限定义不合法 无[{}]权限定义",mustRole);
                 throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
             }
             String userRole = loginUser.getUserRole();
@@ -72,7 +72,7 @@ public class AuthInterceptor {
 //            }
             //当前登录用户是否符合权限
             if (!mustRole.equals(userRole)) {
-                log.warn("用户无[{}]权限",mustRole);
+                log.error("用户无[{}]权限",mustRole);
                 throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
             }
         }

@@ -2,23 +2,25 @@ package com.hry.gloryapi.backend.controller;
 
 import com.google.gson.Gson;
 import com.hry.gloryapi.backend.annotation.AuthCheck;
-import com.hry.gloryapi.backend.common.BaseResponse;
-import com.hry.gloryapi.backend.common.ErrorCode;
-import com.hry.gloryapi.backend.common.PageResponse;
-import com.hry.gloryapi.backend.common.ResultUtils;
+import com.hry.gloryapi.backend.common.*;
+import com.hry.gloryapi.backend.constant.InterfaceInfoConstant;
 import com.hry.gloryapi.backend.constant.UserConstant;
 import com.hry.gloryapi.backend.exception.BusinessException;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
+import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.hry.gloryapi.backend.model.entity.InterfaceInfo;
 import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.backend.service.InterfaceInfoService;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.Id;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * api平台接口信息管理 接口
@@ -42,6 +44,7 @@ public class InterfaceInfoController {
      */
     @ApiOperation("添加接口信息")
     @PostMapping("/add")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addInterfaceInfo(@Validated @RequestBody InterfaceInfoAddRequest interfaceInfoAddRequest){
         Long id = interfaceInfoService.addInterfaceInfo(interfaceInfoAddRequest);
         return ResultUtils.success(id);
@@ -59,16 +62,16 @@ public class InterfaceInfoController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //接口中心只展示启用接口
-        interfaceInfoQueryRequest.setStatus(2);
+        interfaceInfoQueryRequest.setStatus(InterfaceInfoConstant.INTERFACE_STATUS_ON);
         return ResultUtils.success(interfaceInfoService.listInterfaceInfoVoByPage(interfaceInfoQueryRequest));
     }
 
     /**
-     * 接口管理列表 只有管理员可以查询
+     * 管理页接口管理列表 管理员查询
      * @param interfaceInfoQueryRequest
      * @return
      */
-    @ApiOperation("获取接口信息 分页")
+    @ApiOperation("获取管理页接口信息 分页")
     @PostMapping("/admin/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<PageResponse<InterfaceInfoVo>> listInterfaceInfoVoByPageForAdmin(@RequestBody InterfaceInfoQueryRequest interfaceInfoQueryRequest){
@@ -78,10 +81,56 @@ public class InterfaceInfoController {
         return ResultUtils.success(interfaceInfoService.listInterfaceInfoVoByPage(interfaceInfoQueryRequest));
     }
 
+    /**
+     * 上线接口
+     * @param idRequest
+     * @return
+     */
+    @ApiOperation("上线接口")
+    @PostMapping("/admin/online")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<String> onlineInterface(@Validated @RequestBody IdRequest idRequest){
+        interfaceInfoService.updateStatus(idRequest);
+        return ResultUtils.success("ok");
+    }
 
+    /**
+     * 下线接口
+     * @param idRequest
+     * @return
+     */
+    @ApiOperation("下线接口")
+    @PostMapping("/admin/offline")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<String> offlineInterface(@Validated @RequestBody IdRequest idRequest){
+        interfaceInfoService.updateStatus(idRequest);
+        return ResultUtils.success("ok");
+    }
 
+    /**
+     * 修改接口信息
+     * @param interfaceInfoUpdateRequest
+     * @return
+     */
+    @ApiOperation("修改接口信息")
+    @PostMapping("/admin/update")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<String> updateInterfaceInfo(@Validated @RequestBody InterfaceInfoUpdateRequest interfaceInfoUpdateRequest){
+        interfaceInfoService.updateInterfaceInfo(interfaceInfoUpdateRequest);
+        return ResultUtils.success("ok");
+    }
 
-
-
+    /**
+     * 删除接口信息
+     * @param idRequest
+     * @return
+     */
+    @ApiOperation("删除接口")
+    @PostMapping("/admin/delete")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<String> deleteInterfaceInfo(@Validated @RequestBody IdRequest idRequest){
+        interfaceInfoService.deleteIntefaceInfo(idRequest);
+        return ResultUtils.success("ok");
+    }
 
 }

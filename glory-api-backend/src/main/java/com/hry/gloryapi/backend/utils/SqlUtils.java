@@ -34,13 +34,13 @@ public class SqlUtils {
         if(SqlInjectionUtils.check(sortField)){
             return false;
         }
-        //查询是否存在
-
+        //查询排序字段是否存在
         Field[] fields = clazz.getDeclaredFields();
         List<String> fieldsName = Arrays.stream(fields).map(field -> {
             field.setAccessible(true);
             return field.getName();
         }).collect(Collectors.toList());
+
         return fieldsName.contains(sortField);
     }
 }

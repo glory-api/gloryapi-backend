@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
             if (errors != null) {
                 errors.forEach(p -> {
                     FieldError fieldError = (FieldError) p;
-                    log.warn("[{}]Bad Request Parameters: dto entity [{}],field [{}],message [{}]",e.getParameter().getExecutable().toGenericString(),fieldError.getObjectName(), fieldError.getField(), fieldError.getDefaultMessage());
+                    log.error("[{}]Bad Request Parameters: dto entity [{}],field [{}],message [{}]",e.getParameter().getExecutable().toGenericString(),fieldError.getObjectName(), fieldError.getField(), fieldError.getDefaultMessage());
                     stringBuilder.append("["+fieldError.getField()+"]"+":"+fieldError.getDefaultMessage()+";");
                 });
             }

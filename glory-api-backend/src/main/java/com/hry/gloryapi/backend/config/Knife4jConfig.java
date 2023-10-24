@@ -33,7 +33,7 @@ public class Knife4jConfig {
                         .build())
                 .select()
                 // 指定 Controller 扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.hry.gloryapi.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.hry.gloryapi.backend.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

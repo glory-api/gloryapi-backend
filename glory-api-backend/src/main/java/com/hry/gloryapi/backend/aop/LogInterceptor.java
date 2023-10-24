@@ -23,7 +23,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 @Aspect
 @Component
-@Order(1)//切面类顺序 越小越先执行
+@Order(0)//切面类顺序 越小越先执行
 public class LogInterceptor {
 
     /**

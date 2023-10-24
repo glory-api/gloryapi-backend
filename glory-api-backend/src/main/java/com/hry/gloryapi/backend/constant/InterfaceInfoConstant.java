@@ -12,13 +12,14 @@ import java.util.stream.Collectors;
  * @author: huangry
  * @create: 2023/10/20
  **/
-public class InterfaceInfoConstant {
-    public static List<String> sortFields;
-    static {
-        Field[] interfaceInfoFields = InterfaceInfo.class.getDeclaredFields();
-        sortFields = Arrays.stream(interfaceInfoFields).map(field -> {
-            field.setAccessible(true);
-            return field.getName();
-        }).collect(Collectors.toList());
-    }
+public interface InterfaceInfoConstant {
+    /**
+     * 接口状态：开启
+     */
+    Integer INTERFACE_STATUS_ON = 1;
+
+    /**
+     * 接口状态：关闭
+     */
+    Integer INTERFACE_STATUS_OFF = 0;
 }
