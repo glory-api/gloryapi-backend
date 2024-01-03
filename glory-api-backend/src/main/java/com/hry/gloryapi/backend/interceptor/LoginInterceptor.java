@@ -1,15 +1,18 @@
 package com.hry.gloryapi.backend.interceptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.hry.gloryapi.backend.common.ErrorCode;
-import com.hry.gloryapi.backend.common.ResultUtils;
 import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.utils.UserContext;
 import com.hry.gloryapi.backend.exception.BusinessException;
 import com.hry.gloryapi.backend.service.UserService;
 import com.hry.gloryapi.backend.constant.UserConstant;
+import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.gloryapi.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -29,6 +32,8 @@ import static com.hry.gloryapi.backend.constant.UserConstant.USER_LOGIN_STATE;
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private UserService userService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private final static Gson GSON = new Gson();
 
@@ -52,7 +57,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.setContentType("application/json;charset=utf-8");
             if(e instanceof BusinessException){
                 BusinessException e1 = (BusinessException) e;
-                response.getWriter().write(GSON.toJson(ResultUtils.error(e1.getCode(), e.getMessage())));
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(objectMapper.writeValueAsString(ResultUtils.error(e1.getCode(),e1.getMessage())));
             }else {
                 response.getWriter().write(GSON.toJson(ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误")));
             }

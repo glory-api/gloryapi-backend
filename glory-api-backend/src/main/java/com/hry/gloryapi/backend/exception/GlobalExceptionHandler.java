@@ -1,14 +1,16 @@
 package com.hry.gloryapi.backend.exception;
 
-import com.hry.gloryapi.backend.common.BaseResponse;
-import com.hry.gloryapi.backend.common.ErrorCode;
-import com.hry.gloryapi.backend.common.ResultUtils;
+import com.hry.gloryapi.common.dto.BaseResponse;
+import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.gloryapi.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
@@ -24,12 +26,14 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse<?> businessExceptionHandler(BusinessException e) {
         log.error("BusinessException", e);
         return ResultUtils.error(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse<?> businessExceptionHandler(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException", e);
         BindingResult bindingResult = e.getBindingResult();
@@ -49,8 +53,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse<?> runtimeExceptionHandler(RuntimeException e) {
         log.error("RuntimeException", e);
-        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误");
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误，请查看系统运行日志获得进一步的信息。");
     }
 }

@@ -1,9 +1,10 @@
-package com.hry.gloryapi.backend.common;
+package com.hry.gloryapi.common.dto;
+
+
+import com.hry.gloryapi.common.enums.ErrorCode;
+import lombok.Data;
 
 import java.io.Serializable;
-
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 /**
  * 通用返回类
@@ -16,11 +17,17 @@ import lombok.Data;
 public class BaseResponse<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("错误码")
+    /**
+     * 错误码
+     */
     private int code;
-    @ApiModelProperty("响应数据")
+    /**
+     * 响应数据
+     */
     private T data;
-    @ApiModelProperty("响应信息")
+    /**
+     * 响应信息
+     */
     private String message;
 
     public BaseResponse(int code, T data, String message) {

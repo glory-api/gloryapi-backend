@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.config;
+package com.hry.gloryapi.interfaceServer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +28,12 @@ public class Knife4jConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()
                         .title("接口文档")
-                        .description("glory-api-backend-server")
+                        .description("glory-api-interface-server")
                         .version("1.0")
                         .build())
                 .select()
                 // 指定 Controller 扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.hry.gloryapi.backend.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.hry.gloryapi.interfaceServer.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

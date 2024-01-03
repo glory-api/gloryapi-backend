@@ -2,10 +2,9 @@ package com.hry.gloryapi.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hry.gloryapi.backend.annotation.AuthCheck;
-import com.hry.gloryapi.backend.common.BaseResponse;
+
 import com.hry.gloryapi.backend.common.IdRequest;
-import com.hry.gloryapi.backend.common.ErrorCode;
-import com.hry.gloryapi.backend.common.ResultUtils;
+
 import com.hry.gloryapi.backend.constant.UserConstant;
 import com.hry.gloryapi.backend.exception.BusinessException;
 import com.hry.gloryapi.backend.exception.ThrowUtils;
@@ -26,6 +25,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hry.gloryapi.common.dto.BaseResponse;
+import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.gloryapi.common.utils.ResultUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;

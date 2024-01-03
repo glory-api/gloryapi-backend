@@ -10,6 +10,7 @@
     <modules>
         <module>glory-api-interface</module>
         <module>glory-api-backend</module>
+        <module>glory-api-common</module>
     </modules>
     
     <groupId>com.hry</groupId>

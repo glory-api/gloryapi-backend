@@ -1,6 +1,7 @@
 package com.hry.gloryapi.backend.exception;
 
-import com.hry.gloryapi.backend.common.ErrorCode;
+
+import com.hry.gloryapi.common.enums.ErrorCode;
 
 /**
  * 抛异常工具类

@@ -2,25 +2,28 @@ package com.hry.gloryapi.backend.controller;
 
 import com.google.gson.Gson;
 import com.hry.gloryapi.backend.annotation.AuthCheck;
-import com.hry.gloryapi.backend.common.*;
+import com.hry.gloryapi.backend.common.IdRequest;
+import com.hry.gloryapi.backend.common.PageResponse;
 import com.hry.gloryapi.backend.constant.InterfaceInfoConstant;
 import com.hry.gloryapi.backend.constant.UserConstant;
 import com.hry.gloryapi.backend.exception.BusinessException;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
-import com.hry.gloryapi.backend.model.entity.InterfaceInfo;
 import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.backend.service.InterfaceInfoService;
-
+import com.hry.gloryapi.common.dto.BaseResponse;
+import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.gloryapi.common.utils.ResultUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.annotation.Id;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 
 /**
  * api平台接口信息管理 接口
@@ -29,7 +32,7 @@ import java.util.Objects;
  * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @RestController
-@RequestMapping("/interface")
+@RequestMapping("/api/interface")
 @Slf4j
 public class InterfaceInfoController {
     private static final Gson GSON = new Gson();

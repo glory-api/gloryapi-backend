@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     
-    <artifactId>glory-api-interface</artifactId>
+    <artifactId>glory-api-common</artifactId>
     
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,17 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.hry</groupId>
-            <artifactId>glory-api-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 </project>

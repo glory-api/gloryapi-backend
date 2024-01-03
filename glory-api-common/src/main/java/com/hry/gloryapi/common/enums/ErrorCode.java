@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.common;
+package com.hry.gloryapi.common.enums;
 
 /**
  * 自定义错误码

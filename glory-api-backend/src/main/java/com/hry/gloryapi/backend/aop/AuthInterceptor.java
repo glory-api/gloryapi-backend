@@ -1,15 +1,11 @@
 package com.hry.gloryapi.backend.aop;
 
 import com.hry.gloryapi.backend.annotation.AuthCheck;
-import com.hry.gloryapi.backend.common.ErrorCode;
+import com.hry.gloryapi.backend.exception.BusinessException;
 import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.model.enums.UserRoleEnum;
-import com.hry.gloryapi.backend.exception.BusinessException;
 import com.hry.gloryapi.backend.service.UserService;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.hry.gloryapi.common.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,6 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 权限校验 AOP

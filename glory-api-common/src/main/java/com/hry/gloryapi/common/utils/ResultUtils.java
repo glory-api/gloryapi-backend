@@ -1,4 +1,7 @@
-package com.hry.gloryapi.backend.common;
+package com.hry.gloryapi.common.utils;
+
+import com.hry.gloryapi.common.dto.BaseResponse;
+import com.hry.gloryapi.common.enums.ErrorCode;
 
 /**
  * 返回工具类

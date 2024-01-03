@@ -6,7 +6,6 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hry.gloryapi.backend.common.ErrorCode;
 import com.hry.gloryapi.backend.exception.BusinessException;
 import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
 import com.hry.gloryapi.backend.model.entity.User;
@@ -25,6 +24,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
+import com.hry.gloryapi.common.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.RandomUtils;

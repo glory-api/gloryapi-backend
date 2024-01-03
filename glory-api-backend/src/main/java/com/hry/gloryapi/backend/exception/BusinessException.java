@@ -1,6 +1,8 @@
 package com.hry.gloryapi.backend.exception;
 
-import com.hry.gloryapi.backend.common.ErrorCode;
+import com.hry.gloryapi.common.enums.ErrorCode;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * 自定义异常类
