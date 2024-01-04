@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.exception;
+package com.hry.gloryapi.common.exception;
 
 
 import com.hry.gloryapi.common.enums.ErrorCode;

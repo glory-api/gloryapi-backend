@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.exception;
+package com.hry.gloryapi.common.exception;
 
 import com.hry.gloryapi.common.dto.BaseResponse;
 import com.hry.gloryapi.common.enums.ErrorCode;
@@ -56,6 +56,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse<?> runtimeExceptionHandler(RuntimeException e) {
         log.error("RuntimeException", e);
-        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误，请查看系统运行日志获得进一步的信息。");
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, e.getMessage()+"系统错误，请查看系统运行日志获得进一步的信息。");
     }
 }

@@ -6,7 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hry.gloryapi.backend.exception.BusinessException;
+import com.hry.gloryapi.common.exception.BusinessException;
 import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
 import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.model.enums.UserRoleEnum;

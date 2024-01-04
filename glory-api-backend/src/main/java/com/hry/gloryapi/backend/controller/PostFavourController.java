@@ -2,8 +2,6 @@ package com.hry.gloryapi.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
-import com.hry.gloryapi.backend.exception.BusinessException;
-import com.hry.gloryapi.backend.exception.ThrowUtils;
 import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.dto.postfavour.PostFavourAddRequest;
 import com.hry.gloryapi.backend.model.dto.postfavour.PostFavourQueryRequest;
@@ -19,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.hry.gloryapi.common.dto.BaseResponse;
 import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.gloryapi.common.exception.BusinessException;
+import com.hry.gloryapi.common.exception.ThrowUtils;
 import com.hry.gloryapi.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

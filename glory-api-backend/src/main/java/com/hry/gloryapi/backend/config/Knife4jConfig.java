@@ -1,5 +1,6 @@
 package com.hry.gloryapi.backend.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -20,7 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @Configuration
 @EnableSwagger2WebMvc
-@Profile({"dev","test"})//用于指定什么时候生效
+@ConditionalOnExpression("'${spring.profiles.active}'=='dev'")
 public class Knife4jConfig {
 
     @Bean

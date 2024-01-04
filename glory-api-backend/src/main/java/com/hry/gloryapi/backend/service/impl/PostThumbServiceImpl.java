@@ -2,7 +2,7 @@ package com.hry.gloryapi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hry.gloryapi.backend.exception.BusinessException;
+import com.hry.gloryapi.common.exception.BusinessException;
 import com.hry.gloryapi.backend.model.entity.Post;
 import com.hry.gloryapi.backend.model.entity.PostThumb;
 import com.hry.gloryapi.backend.model.entity.User;
