@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.hry.gloryapi.common.exception.BusinessException;
-import com.hry.gloryapi.common.exception.ThrowUtils;
+import com.hry.gloryapi.common.utils.ThrowUtils;
 import com.hry.gloryapi.backend.model.dto.post.PostEsDTO;
 import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.entity.Post;

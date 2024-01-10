@@ -69,6 +69,11 @@ public class InterfaceInfoAddRequest implements Serializable {
     @ApiModelProperty("响应头")
     private String responseHeader;
 
+    /**
+     * 响应示例
+     */
+    @ApiModelProperty("响应示例")
+    private String responseExample = "{\"code\":0, \"data\": 1,\"message\": \"ok\"}";
 
     /**
      * 请求类型

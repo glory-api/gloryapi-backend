@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author: huangry
  * @create: 2023/10/24
  **/
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.hry.gloryapi"})
 public class InterfaceServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(InterfaceServerApplication.class,args);

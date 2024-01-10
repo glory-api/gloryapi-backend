@@ -16,27 +16,27 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
     /**
      * 名称
      */
-    private String name;
+    private String name = "";
 
     /**
      * 描述
      */
-    private String description;
+    private String description = "";
 
     /**
      * 接口地址
      */
-    private String url;
+    private String url = "";
 
     /**
-     * 接口状态（0-未审批，1-关闭，2-开启）
+     * 接口状态（0-关闭，1开启）
      */
-    private Integer status;
+    private Integer status = 0;
 
     /**
      * 请求类型
      */
-    private String method;
+    private String method = "";
 
 
 }

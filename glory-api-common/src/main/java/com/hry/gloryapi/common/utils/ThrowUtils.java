@@ -1,7 +1,8 @@
-package com.hry.gloryapi.common.exception;
+package com.hry.gloryapi.common.utils;
 
 
 import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.gloryapi.common.exception.BusinessException;
 
 /**
  * 抛异常工具类

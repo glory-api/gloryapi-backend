@@ -24,7 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Aspect
 @Component
 @Order(0)//切面类顺序 越小越先执行
-public class LogInterceptor {
+public class AccessLogAop {
 
     /**
      * 利用AOP执行拦截，计算接收请求到返回请求的时间

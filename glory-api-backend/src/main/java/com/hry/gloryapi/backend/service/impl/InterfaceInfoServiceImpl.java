@@ -11,7 +11,7 @@ import com.hry.gloryapi.backend.common.IdRequest;
 import com.hry.gloryapi.backend.common.PageResponse;
 import com.hry.gloryapi.backend.constant.CommonConstant;
 import com.hry.gloryapi.common.exception.BusinessException;
-import com.hry.gloryapi.common.exception.ThrowUtils;
+import com.hry.gloryapi.common.utils.ThrowUtils;
 import com.hry.gloryapi.backend.mapper.InterfaceInfoMapper;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
@@ -50,7 +50,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     @Override
     public PageResponse<InterfaceInfoVo> listInterfaceInfoVoByPage(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
         Page<InterfaceInfo> page = new Page<>(interfaceInfoQueryRequest.getCurrent(), interfaceInfoQueryRequest.getPageSize());
-        QueryWrapper<InterfaceInfo> queryWrapper = getQueryWrapper(interfaceInfoQueryRequest);
+        QueryWrapper<InterfaceInfo> queryWrapper = getListQueryWrapper(interfaceInfoQueryRequest);
         Page<InterfaceInfo> resultPage = interfaceInfoMapper.selectPage(page, queryWrapper);
         return toPageVo(resultPage);
     }
@@ -113,8 +113,8 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         return 0;
     }
 
-    @Override
-    public QueryWrapper<InterfaceInfo> getQueryWrapper(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
+
+    private QueryWrapper<InterfaceInfo> getListQueryWrapper(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
         //获取查询参数
         String name = interfaceInfoQueryRequest.getName();
         String description = interfaceInfoQueryRequest.getDescription();
@@ -143,11 +143,11 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     @Override
     public PageResponse<InterfaceInfoVo> toPageVo(Page<InterfaceInfo> page) {
         PageResponse<InterfaceInfoVo> pageVo= new PageResponse<>();
-        BeanUtil.copyProperties(page, pageVo, "records");
         //查询结果为空
         if (CollectionUtils.isEmpty(page.getRecords())) {
             return pageVo;
         }
+        BeanUtil.copyProperties(page, pageVo, "records");
         //封装查询结果中每一个VO
         List<InterfaceInfoVo> collect = page.getRecords().stream().map(o -> toInterfaceInfoVo(o)).collect(Collectors.toList());
         BeanUtil.copyProperties(page, pageVo, "records");

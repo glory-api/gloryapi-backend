@@ -18,10 +18,7 @@ import com.hry.gloryapi.common.utils.ResultUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -46,7 +43,7 @@ public class InterfaceInfoController {
      * @return
      */
     @ApiOperation("添加接口信息")
-    @PostMapping("/add")
+    @PostMapping("/admin/add")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addInterfaceInfo(@Validated @RequestBody InterfaceInfoAddRequest interfaceInfoAddRequest){
         Long id = interfaceInfoService.addInterfaceInfo(interfaceInfoAddRequest);
@@ -59,8 +56,8 @@ public class InterfaceInfoController {
      * @return
      */
     @ApiOperation("获取接口信息 分页")
-    @PostMapping("/center/page")
-    public BaseResponse<PageResponse<InterfaceInfoVo>> listInterfaceInfoVoByPage(@RequestBody InterfaceInfoQueryRequest interfaceInfoQueryRequest){
+    @GetMapping("/center/page")
+    public BaseResponse<PageResponse<InterfaceInfoVo>> listInterfaceInfoVoByPage( InterfaceInfoQueryRequest interfaceInfoQueryRequest){
         if(interfaceInfoQueryRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

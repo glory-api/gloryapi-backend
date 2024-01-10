@@ -59,6 +59,11 @@ public class InterfaceInfoVo implements Serializable {
     private String responseHeader;
 
     /**
+     * 响应示例
+     */
+    private String responseExample;
+
+    /**
      * 接口状态（0-未审批，1-关闭，2-开启）
      */
     private Integer status;

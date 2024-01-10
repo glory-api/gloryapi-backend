@@ -52,12 +52,6 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      */
     int deleteIntefaceInfo(IdRequest idRequest);
 
-    /**
-     * 获取查询包装类
-     * @param interfaceInfoQueryRequest
-     * @return
-     */
-    QueryWrapper<InterfaceInfo> getQueryWrapper(InterfaceInfoQueryRequest interfaceInfoQueryRequest);
 
     /**
      * 分页查询结果转换为Vo类的分页查询结果

@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.hry.gloryapi.common.dto.BaseResponse;
 import com.hry.gloryapi.common.enums.ErrorCode;
 import com.hry.gloryapi.common.exception.BusinessException;
-import com.hry.gloryapi.common.exception.ThrowUtils;
+import com.hry.gloryapi.common.utils.ThrowUtils;
 import com.hry.gloryapi.common.utils.ResultUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api("用户接口")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @Slf4j
 public class UserController {
 

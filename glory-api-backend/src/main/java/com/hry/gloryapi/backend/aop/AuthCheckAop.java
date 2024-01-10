@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 @Component
 @Order(1)//切面类顺序 越小越先执行
-public class AuthInterceptor {
+public class AuthCheckAop {
 
     @Resource
     private UserService userService;

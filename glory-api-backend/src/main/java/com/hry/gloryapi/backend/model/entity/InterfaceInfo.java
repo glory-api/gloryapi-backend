@@ -1,6 +1,7 @@
 package com.hry.gloryapi.backend.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -54,6 +55,11 @@ public class InterfaceInfo implements Serializable {
      * 响应头
      */
     private String responseHeader;
+
+    /**
+     * 响应示例
+     */
+    private String responseExample;
 
     /**
      * 接口状态（0-未审批，1-关闭，2-开启）

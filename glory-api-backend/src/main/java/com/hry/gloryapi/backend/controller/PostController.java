@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.hry.gloryapi.common.dto.BaseResponse;
 import com.hry.gloryapi.common.enums.ErrorCode;
 import com.hry.gloryapi.common.exception.BusinessException;
-import com.hry.gloryapi.common.exception.ThrowUtils;
+import com.hry.gloryapi.common.utils.ThrowUtils;
 import com.hry.gloryapi.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
