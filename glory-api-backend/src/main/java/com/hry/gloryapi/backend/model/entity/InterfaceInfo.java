@@ -62,9 +62,9 @@ public class InterfaceInfo implements Serializable {
     private String responseExample;
 
     /**
-     * 接口状态（0-未审批，1-关闭，2-开启）
+     * 接口状态（0-关闭，2-开启）
      */
-    private Integer status;
+    private String status;
 
     /**
      * 请求类型

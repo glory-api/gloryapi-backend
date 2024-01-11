@@ -31,12 +31,11 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
     /**
      * 接口状态（0-关闭，1开启）
      */
-    private Integer status = 0;
+    private String status = "";
 
     /**
      * 请求类型
      */
     private String method = "";
-
 
 }

@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.hry.gloryapi.backend.annotation.AuthCheck;
 import com.hry.gloryapi.backend.common.IdRequest;
 import com.hry.gloryapi.backend.common.PageResponse;
-import com.hry.gloryapi.backend.constant.InterfaceInfoConstant;
 import com.hry.gloryapi.backend.constant.UserConstant;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.hry.gloryapi.backend.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.backend.service.InterfaceInfoService;
 import com.hry.gloryapi.common.dto.BaseResponse;
@@ -62,7 +62,7 @@ public class InterfaceInfoController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //接口中心只展示启用接口
-        interfaceInfoQueryRequest.setStatus(InterfaceInfoConstant.INTERFACE_STATUS_ON);
+        interfaceInfoQueryRequest.setStatus(InterfaceStatusEnum.ON.getCode());
         return ResultUtils.success(interfaceInfoService.listInterfaceInfoVoByPage(interfaceInfoQueryRequest));
     }
 

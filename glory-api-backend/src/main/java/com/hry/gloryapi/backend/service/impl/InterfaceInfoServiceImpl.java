@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.hry.gloryapi.backend.common.IdRequest;
 import com.hry.gloryapi.backend.common.PageResponse;
 import com.hry.gloryapi.backend.constant.CommonConstant;
+import com.hry.gloryapi.backend.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.common.exception.BusinessException;
 import com.hry.gloryapi.common.utils.ThrowUtils;
 import com.hry.gloryapi.backend.mapper.InterfaceInfoMapper;
@@ -74,12 +75,12 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         //发布接口 要测试接口
-        if(interfaceInfo.getStatus() == 0){
+        if(interfaceInfo.getStatus().equals(InterfaceStatusEnum.OFF.getCode())){
             // TODO: 2023/10/24 调用接口
-            interfaceInfo.setStatus(1);
+            interfaceInfo.setStatus("1");
             log.info("{}接口发布",interfaceInfo.getId());
         }else {
-            interfaceInfo.setStatus(0);
+            interfaceInfo.setStatus("0");
             log.info("{}接口下线",interfaceInfo.getId());
         }
 
@@ -119,7 +120,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String name = interfaceInfoQueryRequest.getName();
         String description = interfaceInfoQueryRequest.getDescription();
         String url = interfaceInfoQueryRequest.getUrl();
-        Integer status = interfaceInfoQueryRequest.getStatus();
+        String status = interfaceInfoQueryRequest.getStatus();
         String method = interfaceInfoQueryRequest.getMethod();
         String sortField = interfaceInfoQueryRequest.getSortField();
         String sortOrder = interfaceInfoQueryRequest.getSortOrder();
@@ -134,7 +135,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         wrapper.like(StringUtils.isNotBlank(name), "name", name);
         wrapper.like(StringUtils.isNotBlank(description), "description", description);
         wrapper.like(StringUtils.isNotBlank(url), "url", url);
-        wrapper.eq(!Objects.isNull(status), "status", status);
+        wrapper.eq(StringUtils.isNotBlank(status), "status", status);
         wrapper.eq(StringUtils.isNotBlank(method), "method", method);
         wrapper.orderBy(SqlUtils.validSortField(sortField,InterfaceInfo.class), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
         return wrapper;
