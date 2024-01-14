@@ -1,8 +1,8 @@
-package com.hry.gloryapi.common.exception;
+package com.hry.glory.common.exception;
 
-import com.hry.gloryapi.common.dto.BaseResponse;
-import com.hry.gloryapi.common.enums.ErrorCode;
-import com.hry.gloryapi.common.utils.ResultUtils;
+import com.hry.glory.common.dto.BaseResponse;
+import com.hry.glory.common.enums.ErrorCode;
+import com.hry.glory.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;

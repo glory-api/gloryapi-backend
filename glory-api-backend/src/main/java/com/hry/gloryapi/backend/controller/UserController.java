@@ -23,11 +23,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hry.gloryapi.common.dto.BaseResponse;
-import com.hry.gloryapi.common.enums.ErrorCode;
-import com.hry.gloryapi.common.exception.BusinessException;
-import com.hry.gloryapi.common.utils.ThrowUtils;
-import com.hry.gloryapi.common.utils.ResultUtils;
+import com.hry.glory.common.dto.BaseResponse;
+import com.hry.glory.common.enums.ErrorCode;
+import com.hry.glory.common.exception.BusinessException;
+import com.hry.glory.common.utils.ThrowUtils;
+import com.hry.glory.common.utils.ResultUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;

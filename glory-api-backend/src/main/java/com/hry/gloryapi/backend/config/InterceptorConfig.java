@@ -16,6 +16,7 @@ import java.util.List;
  * @create: 2023/10/13
  **/
 @Configuration
+@ConditionalOnExpression("'${spring.profiles.active}'=='prod'")
 public class InterceptorConfig implements WebMvcConfigurer {
     @Resource
     private LoginInterceptor loginInterceptor;

@@ -1,7 +1,7 @@
-package com.hry.gloryapi.common.dto;
+package com.hry.glory.common.dto;
 
 
-import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.glory.common.enums.ErrorCode;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hry.gloryapi.common.exception.BusinessException;
+import com.hry.glory.common.exception.BusinessException;
 import com.hry.gloryapi.backend.model.entity.Post;
 import com.hry.gloryapi.backend.model.entity.PostFavour;
 import com.hry.gloryapi.backend.model.entity.User;
@@ -15,7 +15,7 @@ import com.hry.gloryapi.backend.mapper.PostFavourMapper;
 
 import javax.annotation.Resource;
 
-import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.glory.common.enums.ErrorCode;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

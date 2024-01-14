@@ -1,7 +1,7 @@
-package com.hry.gloryapi.common.utils;
+package com.hry.glory.common.utils;
 
-import com.hry.gloryapi.common.dto.BaseResponse;
-import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.glory.common.dto.BaseResponse;
+import com.hry.glory.common.enums.ErrorCode;
 
 /**
  * 返回工具类

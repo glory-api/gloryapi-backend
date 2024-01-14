@@ -1,6 +1,6 @@
-package com.hry.gloryapi.common.exception;
+package com.hry.glory.common.exception;
 
-import com.hry.gloryapi.common.enums.ErrorCode;
+import com.hry.glory.common.enums.ErrorCode;
 
 /**
  * 自定义异常类

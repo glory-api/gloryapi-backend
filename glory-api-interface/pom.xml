@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.hry</groupId>
-            <artifactId>glory-api-common</artifactId>
+            <artifactId>glory-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

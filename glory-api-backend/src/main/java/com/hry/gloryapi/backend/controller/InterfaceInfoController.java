@@ -11,10 +11,10 @@ import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateReque
 import com.hry.gloryapi.backend.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.backend.service.InterfaceInfoService;
-import com.hry.gloryapi.common.dto.BaseResponse;
-import com.hry.gloryapi.common.enums.ErrorCode;
-import com.hry.gloryapi.common.exception.BusinessException;
-import com.hry.gloryapi.common.utils.ResultUtils;
+import com.hry.glory.common.dto.BaseResponse;
+import com.hry.glory.common.enums.ErrorCode;
+import com.hry.glory.common.exception.BusinessException;
+import com.hry.glory.common.utils.ResultUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
