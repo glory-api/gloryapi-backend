@@ -26,7 +26,7 @@ public enum ErrorCode {
     /**
      * 请求数据不存在
      */
-    NOT_FOUND_ERROR(40400, "请求数据不存在"),
+    NOT_FOUND_ERROR(40400, "请求资源不存在"),
     /**
      * 禁止访问
      */
@@ -36,9 +36,9 @@ public enum ErrorCode {
      */
     SYSTEM_ERROR(50000, "系统内部异常"),
     /**
-     * 操作失败
+     * 业务异常
      */
-    OPERATION_ERROR(50001, "操作失败");
+    OPERATION_ERROR(50001, "业务异常");
 
     /**
      * 状态码

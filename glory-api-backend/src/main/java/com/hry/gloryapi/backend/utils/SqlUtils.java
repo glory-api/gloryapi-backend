@@ -29,7 +29,6 @@ public class SqlUtils {
             return false;
         }
 
-//        return !StringUtils.containsAny(sortField, "=", "(", ")", " ");
         //使用mybatisPlus 提供的校验注入工具
         if(SqlInjectionUtils.check(sortField)){
             return false;
