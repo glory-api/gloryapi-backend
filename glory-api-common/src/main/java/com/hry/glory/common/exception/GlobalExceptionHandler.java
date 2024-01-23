@@ -5,6 +5,7 @@ import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -27,14 +28,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResponse<?> businessExceptionHandler(BusinessException e) {
+    public BaseResponse<Object> businessExceptionHandler(BusinessException e) {
         log.error("BusinessException", e);
         return ResultUtils.error(e.getCode(), e.getMessage());
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({BindException.class,})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResponse<?> businessExceptionHandler(MethodArgumentNotValidException e) {
+    public BaseResponse<Object> businessExceptionHandler(BindException e) {
         log.error("MethodArgumentNotValidException", e);
         BindingResult bindingResult = e.getBindingResult();
         StringBuilder stringBuilder = new StringBuilder();
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler {
             if (errors != null) {
                 errors.forEach(p -> {
                     FieldError fieldError = (FieldError) p;
-                    log.error("[{}]Bad Request Parameters: dto entity [{}],field [{}],message [{}]",e.getParameter().getExecutable().toGenericString(),fieldError.getObjectName(), fieldError.getField(), fieldError.getDefaultMessage());
+                    log.error("Bad Request Parameters: dto entity [{}],field [{}],message [{}]",fieldError.getObjectName(), fieldError.getField(), fieldError.getDefaultMessage());
                     stringBuilder.append("请求参数错误："+"["+fieldError.getField()+"]"+":"+fieldError.getDefaultMessage()+";");
                 });
             }
@@ -54,7 +55,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResponse<?> runtimeExceptionHandler(RuntimeException e) {
+    public BaseResponse<Object> runtimeExceptionHandler(RuntimeException e) {
         log.error("RuntimeException", e);
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR, e.getMessage()+"系统错误，请查看系统运行日志获得进一步的信息。");
     }
