@@ -10,7 +10,7 @@
     <modules>
         <module>glory-api-interface</module>
         <module>glory-api-backend</module>
-        <module>glory-api-common</module>
+        <module>glory-api-gateway</module>
     </modules>
     
     <groupId>com.hry</groupId>
@@ -19,20 +19,32 @@
     <name>glory-api</name>
     
     <properties>
-        <java.version>1.8</java.version>
-        <spring-boot-dependencies.version>2.7.2</spring-boot-dependencies.version>
+        <java.version>17</java.version>
+        <spring-boot-dependencies.version>2.7.6</spring-boot-dependencies.version>
         <hutool.version>5.8.8</hutool.version>
         <easyexcel.version>3.1.1</easyexcel.version>
         <cos_api.version>5.6.89</cos_api.version>
         <wx-java-mp.version>4.4.0</wx-java-mp.version>
         <knife4j-openapi2.version>4.3.0</knife4j-openapi2.version>
-        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <mybatis.version>2.2.2</mybatis.version>
     </properties>
     
     
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2021.0.8</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.hry</groupId>
+                <artifactId>glory-common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
             <!-- SpringBoot的依赖配置-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -41,11 +53,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.mybatis.spring.boot</groupId>-->
+<!--                <artifactId>mybatis-spring-boot-starter</artifactId>-->
+<!--                <version>${mybatis.version}</version>-->
+<!--            </dependency>-->
             <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -85,12 +97,6 @@
         </dependencies>
     </dependencyManagement>
     
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>

@@ -1,16 +1,15 @@
-package com.hry.gloryapi.interfaceServer;
+package com.hry.gloryapi.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 开放接口服务启动类
  * @author: huangry
- * @create: 2023/10/24
+ * @create: 2024/4/22
  **/
 @SpringBootApplication
-public class InterfaceServerApplication {
+public class GatewayServerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(InterfaceServerApplication.class,args);
+        SpringApplication.run(GatewayServerApplication.class,args);
     }
 }

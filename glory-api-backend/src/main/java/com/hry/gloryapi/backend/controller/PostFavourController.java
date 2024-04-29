@@ -15,7 +15,7 @@ import com.hry.gloryapi.backend.service.UserService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.hry.glory.common.dto.BaseResponse;
+import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
 import com.hry.glory.common.utils.ThrowUtils;

@@ -3,6 +3,7 @@ package com.hry.gloryapi.backend.controller;
 import cn.hutool.core.io.FileUtil;
 
 
+import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.gloryapi.backend.model.dto.file.UploadFileRequest;
 import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.model.enums.FileUploadBizEnum;
@@ -14,7 +15,6 @@ import java.util.Arrays;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.hry.glory.common.dto.BaseResponse;
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
 import com.hry.glory.common.utils.ResultUtils;

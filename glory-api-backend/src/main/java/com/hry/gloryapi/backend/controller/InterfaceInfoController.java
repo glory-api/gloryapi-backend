@@ -1,6 +1,7 @@
 package com.hry.gloryapi.backend.controller;
 
 import com.google.gson.Gson;
+import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.gloryapi.backend.annotation.AuthCheck;
 import com.hry.gloryapi.backend.common.IdRequest;
 import com.hry.gloryapi.backend.common.PageResponse;
@@ -11,7 +12,6 @@ import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateReque
 import com.hry.gloryapi.backend.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.backend.service.InterfaceInfoService;
-import com.hry.glory.common.dto.BaseResponse;
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
 import com.hry.glory.common.utils.ResultUtils;
@@ -36,6 +36,7 @@ public class InterfaceInfoController {
 
     @Resource
     private InterfaceInfoService interfaceInfoService;
+
 
     /**
      * 添加信息接口
