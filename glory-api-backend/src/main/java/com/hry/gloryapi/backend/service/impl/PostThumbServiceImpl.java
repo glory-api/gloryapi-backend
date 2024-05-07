@@ -2,20 +2,19 @@ package com.hry.gloryapi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
+import com.hry.gloryapi.backend.mapper.PostThumbMapper;
 import com.hry.gloryapi.backend.model.entity.Post;
 import com.hry.gloryapi.backend.model.entity.PostThumb;
-import com.hry.gloryapi.backend.model.entity.User;
-import com.hry.gloryapi.backend.mapper.PostThumbMapper;
 import com.hry.gloryapi.backend.service.PostService;
 import com.hry.gloryapi.backend.service.PostThumbService;
-
-import javax.annotation.Resource;
-
-import com.hry.glory.common.enums.ErrorCode;
+import com.hry.gloryapi.common.model.entity.User;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * 帖子点赞服务实现

@@ -1,8 +1,9 @@
-package com.hry.gloryapi.backend.model.vo;
-
+package com.hry.gloryapi.common.model.vo;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceRequestParam;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceResponseParam;
 import lombok.Data;
 
 import java.io.Serializable;

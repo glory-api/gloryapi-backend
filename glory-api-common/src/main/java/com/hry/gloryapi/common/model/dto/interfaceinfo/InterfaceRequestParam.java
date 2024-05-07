@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.model.vo;
+package com.hry.gloryapi.common.model.dto.interfaceinfo;
 
 import lombok.Data;
 

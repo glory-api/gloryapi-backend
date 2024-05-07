@@ -1,15 +1,14 @@
 package com.hry.gloryapi.backend.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hry.gloryapi.backend.common.IdRequest;
-import com.hry.gloryapi.backend.common.PageResponse;
-import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoAddRequest;
-import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
-import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
-import com.hry.gloryapi.backend.model.entity.InterfaceInfo;
-import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
+import com.hry.gloryapi.common.common.IdRequest;
+import com.hry.gloryapi.common.common.PageResponse;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoAddRequest;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.hry.gloryapi.common.model.entity.InterfaceInfo;
+import com.hry.gloryapi.common.model.vo.InterfaceInfoVo;
 
 /**
 * @author lenovo

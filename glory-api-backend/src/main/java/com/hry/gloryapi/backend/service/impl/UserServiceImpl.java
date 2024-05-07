@@ -1,36 +1,35 @@
 package com.hry.gloryapi.backend.service.impl;
 
-import static com.hry.gloryapi.backend.constant.UserConstant.USER_LOGIN_STATE;
-
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
-import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
-import com.hry.gloryapi.backend.model.entity.User;
-import com.hry.gloryapi.backend.model.enums.UserRoleEnum;
-import com.hry.gloryapi.backend.model.vo.LoginUserVO;
-import com.hry.gloryapi.backend.model.vo.UserVO;
-import com.hry.gloryapi.backend.utils.SqlUtils;
 import com.hry.gloryapi.backend.constant.CommonConstant;
 import com.hry.gloryapi.backend.mapper.UserMapper;
+import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
+import com.hry.gloryapi.backend.model.vo.LoginUserVO;
+import com.hry.gloryapi.backend.model.vo.UserVO;
 import com.hry.gloryapi.backend.service.UserService;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-
-import com.hry.glory.common.enums.ErrorCode;
+import com.hry.gloryapi.backend.utils.SqlUtils;
+import com.hry.gloryapi.common.model.entity.User;
+import com.hry.gloryapi.common.model.enums.UserRoleEnum;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.hry.gloryapi.backend.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 用户服务实现

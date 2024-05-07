@@ -1,6 +1,7 @@
-package com.hry.gloryapi.backend.model.dto.interfaceinfo;
+package com.hry.gloryapi.common.model.dto.interfaceinfo;
 
-import com.hry.gloryapi.backend.common.PageRequest;
+
+import com.hry.gloryapi.common.common.PageRequest;
 import lombok.Data;
 
 import java.io.Serializable;

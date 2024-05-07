@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.model.entity;
+package com.hry.gloryapi.common.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,6 +30,11 @@ public class InterfaceInfo implements Serializable {
      * 描述
      */
     private String description;
+
+    /**
+     * 域名
+     */
+    private String domain;
 
     /**
      * 接口地址

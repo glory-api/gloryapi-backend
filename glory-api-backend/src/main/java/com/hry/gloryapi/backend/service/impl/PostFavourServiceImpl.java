@@ -5,20 +5,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
+import com.hry.gloryapi.backend.mapper.PostFavourMapper;
 import com.hry.gloryapi.backend.model.entity.Post;
 import com.hry.gloryapi.backend.model.entity.PostFavour;
-import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.service.PostFavourService;
 import com.hry.gloryapi.backend.service.PostService;
-import com.hry.gloryapi.backend.mapper.PostFavourMapper;
-
-import javax.annotation.Resource;
-
-import com.hry.glory.common.enums.ErrorCode;
+import com.hry.gloryapi.common.model.entity.User;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * 帖子收藏服务实现

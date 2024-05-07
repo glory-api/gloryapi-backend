@@ -1,11 +1,11 @@
 package com.hry.gloryapi.backend.model.dto.postfavour;
 
-import com.hry.gloryapi.backend.common.PageRequest;
 import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
-
-import java.io.Serializable;
+import com.hry.gloryapi.common.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * 帖子收藏查询请求

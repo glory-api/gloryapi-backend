@@ -1,20 +1,22 @@
 package com.hry.gloryapi.backend.controller;
 
 import com.google.gson.Gson;
-import com.hry.glory.common.model.dto.BaseResponse;
-import com.hry.gloryapi.backend.annotation.AuthCheck;
-import com.hry.gloryapi.backend.common.IdRequest;
-import com.hry.gloryapi.backend.common.PageResponse;
-import com.hry.gloryapi.backend.constant.UserConstant;
-import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoAddRequest;
-import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
-import com.hry.gloryapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
-import com.hry.gloryapi.backend.model.enums.InterfaceStatusEnum;
-import com.hry.gloryapi.backend.model.vo.InterfaceInfoVo;
-import com.hry.gloryapi.backend.service.InterfaceInfoService;
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
+import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.glory.common.utils.ResultUtils;
+import com.hry.gloryapi.backend.annotation.AuthCheck;
+import com.hry.gloryapi.backend.constant.UserConstant;
+import com.hry.gloryapi.backend.service.InterfaceInfoService;
+import com.hry.gloryapi.common.common.IdRequest;
+import com.hry.gloryapi.common.common.PageResponse;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoAddRequest;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.hry.gloryapi.common.model.enums.InterfaceStatusEnum;
+import com.hry.gloryapi.common.model.vo.InterfaceInfoVo;
+import com.hry.gloryapisdk.client.BasicClient;
+import com.hry.gloryapisdk.client.GeneralClientBuild;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -58,7 +60,7 @@ public class InterfaceInfoController {
      */
     @ApiOperation("获取接口信息 分页")
     @GetMapping("/center/page")
-    public BaseResponse<PageResponse<InterfaceInfoVo>> listInterfaceInfoVoByPage( InterfaceInfoQueryRequest interfaceInfoQueryRequest){
+    public BaseResponse<PageResponse<InterfaceInfoVo>> listInterfaceInfoVoByPage(InterfaceInfoQueryRequest interfaceInfoQueryRequest){
         if(interfaceInfoQueryRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -132,6 +134,17 @@ public class InterfaceInfoController {
     public BaseResponse<String> deleteInterfaceInfo(@Validated @RequestBody IdRequest idRequest){
         interfaceInfoService.deleteIntefaceInfo(idRequest);
         return ResultUtils.success("ok");
+    }
+
+    @GetMapping("test")
+    public BaseResponse<String> test(){
+        GeneralClientBuild clientBuild = new GeneralClientBuild();
+        BasicClient client = clientBuild.ak("11").sk("11").domain("127.0.0.1:9009").build();
+        client.uri("/api/interface/basic/randomNum");
+        client.addParam("min",1);
+        client.addParam("max",5);
+        String post = client.get();
+        return ResultUtils.success(post);
     }
 
 }

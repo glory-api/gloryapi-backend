@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.model.enums;
+package com.hry.gloryapi.common.model.enums;
 
 import java.util.Arrays;
 import java.util.List;

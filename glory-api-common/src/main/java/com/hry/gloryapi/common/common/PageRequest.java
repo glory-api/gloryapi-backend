@@ -1,6 +1,6 @@
-package com.hry.gloryapi.backend.common;
+package com.hry.gloryapi.common.common;
 
-import com.hry.gloryapi.backend.constant.CommonConstant;
+import com.hry.gloryapi.common.constant.CommonConstant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

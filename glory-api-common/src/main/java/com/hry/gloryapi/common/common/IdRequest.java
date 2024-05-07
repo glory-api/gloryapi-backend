@@ -1,9 +1,9 @@
-package com.hry.gloryapi.backend.common;
+package com.hry.gloryapi.common.common;
 
-import java.io.Serializable;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 只有ID的请求对象

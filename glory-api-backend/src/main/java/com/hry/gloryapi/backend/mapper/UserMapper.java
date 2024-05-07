@@ -1,7 +1,7 @@
 package com.hry.gloryapi.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hry.gloryapi.backend.model.entity.User;
+import com.hry.gloryapi.common.model.entity.User;
 
 /**
  * 用户数据库操作

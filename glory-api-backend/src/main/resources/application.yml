@@ -1,3 +1,5 @@
 spring:
   profiles:
     active: dev
+  application:
+    name: glory-api-backend-server

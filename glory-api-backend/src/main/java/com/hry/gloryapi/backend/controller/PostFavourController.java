@@ -1,30 +1,28 @@
 package com.hry.gloryapi.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
+import com.hry.glory.common.enums.ErrorCode;
+import com.hry.glory.common.exception.BusinessException;
+import com.hry.glory.common.model.dto.BaseResponse;
+import com.hry.glory.common.utils.ResultUtils;
+import com.hry.glory.common.utils.ThrowUtils;
 import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.dto.postfavour.PostFavourAddRequest;
 import com.hry.gloryapi.backend.model.dto.postfavour.PostFavourQueryRequest;
 import com.hry.gloryapi.backend.model.entity.Post;
-import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.model.vo.PostVO;
 import com.hry.gloryapi.backend.service.PostFavourService;
 import com.hry.gloryapi.backend.service.PostService;
 import com.hry.gloryapi.backend.service.UserService;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import com.hry.glory.common.model.dto.BaseResponse;
-import com.hry.glory.common.enums.ErrorCode;
-import com.hry.glory.common.exception.BusinessException;
-import com.hry.glory.common.utils.ThrowUtils;
-import com.hry.glory.common.utils.ResultUtils;
+import com.hry.gloryapi.common.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 帖子收藏接口

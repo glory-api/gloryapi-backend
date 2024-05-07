@@ -1,9 +1,6 @@
-package com.hry.gloryapi.backend.model.dto.interfaceinfo;
+package com.hry.gloryapi.common.model.dto.interfaceinfo;
 
 
-
-import com.hry.gloryapi.backend.model.vo.InterfaceRequestParam;
-import com.hry.gloryapi.backend.model.vo.InterfaceResponseParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

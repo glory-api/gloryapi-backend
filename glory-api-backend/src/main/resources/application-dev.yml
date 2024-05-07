@@ -5,8 +5,6 @@ server:
   address: 0.0.0.0
   port: 9001
 spring:
-  application:
-    name: glory-api-backend-server
   # 支持 swagger3（springfox）
   mvc:
     pathmatch:
@@ -89,3 +87,12 @@ cos:
 
 login:
   excludePaths: /**/**
+
+dubbo:
+  application:
+   name: ${spring.application.name}
+  protocol:
+    name: dubbo
+    port: 29001
+  registry:
+    address: nacos://localhost:8848

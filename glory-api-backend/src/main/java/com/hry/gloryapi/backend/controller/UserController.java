@@ -1,33 +1,21 @@
 package com.hry.gloryapi.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hry.gloryapi.backend.annotation.AuthCheck;
-
-import com.hry.gloryapi.backend.common.IdRequest;
-
-import com.hry.gloryapi.backend.constant.UserConstant;
-import com.hry.gloryapi.backend.model.entity.User;
-import com.hry.gloryapi.backend.model.vo.LoginUserVO;
-import com.hry.gloryapi.backend.model.vo.UserVO;
-import com.hry.gloryapi.backend.utils.UserContext;
-import com.hry.gloryapi.backend.config.WxOpenConfig;
-import com.hry.gloryapi.backend.model.dto.user.UserAddRequest;
-import com.hry.gloryapi.backend.model.dto.user.UserLoginRequest;
-import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
-import com.hry.gloryapi.backend.model.dto.user.UserRegisterRequest;
-import com.hry.gloryapi.backend.model.dto.user.UserUpdateMyRequest;
-import com.hry.gloryapi.backend.model.dto.user.UserUpdateRequest;
-import com.hry.gloryapi.backend.service.UserService;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
-import com.hry.glory.common.utils.ThrowUtils;
+import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.glory.common.utils.ResultUtils;
+import com.hry.glory.common.utils.ThrowUtils;
+import com.hry.gloryapi.backend.annotation.AuthCheck;
+import com.hry.gloryapi.backend.config.WxOpenConfig;
+import com.hry.gloryapi.backend.constant.UserConstant;
+import com.hry.gloryapi.backend.model.dto.user.*;
+import com.hry.gloryapi.backend.model.vo.LoginUserVO;
+import com.hry.gloryapi.backend.model.vo.UserVO;
+import com.hry.gloryapi.backend.service.UserService;
+import com.hry.gloryapi.backend.utils.UserContext;
+import com.hry.gloryapi.common.common.IdRequest;
+import com.hry.gloryapi.common.model.entity.User;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
@@ -35,12 +23,12 @@ import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.mp.api.WxMpService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 用户接口

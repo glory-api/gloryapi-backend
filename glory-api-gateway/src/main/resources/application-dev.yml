@@ -17,4 +17,12 @@ spring:
           predicates:
             - Path=/api/interface/**
 
-
+dubbo:
+  application:
+    qosEnable: false
+    name: ${spring.application.name}
+  protocol:
+    name: dubbo
+    port: 29009
+  registry:
+    address: nacos://localhost:8848

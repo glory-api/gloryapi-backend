@@ -1,23 +1,22 @@
 package com.hry.gloryapi.backend.controller;
 
 
-import com.hry.gloryapi.backend.model.dto.postthumb.PostThumbAddRequest;
-import com.hry.gloryapi.backend.model.entity.User;
-import com.hry.gloryapi.backend.service.UserService;
-import com.hry.gloryapi.backend.service.PostThumbService;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
+import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.glory.common.utils.ResultUtils;
+import com.hry.gloryapi.backend.model.dto.postthumb.PostThumbAddRequest;
+import com.hry.gloryapi.backend.service.PostThumbService;
+import com.hry.gloryapi.backend.service.UserService;
+import com.hry.gloryapi.common.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 帖子点赞接口

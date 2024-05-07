@@ -4,34 +4,24 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
 import com.hry.glory.common.utils.ThrowUtils;
+import com.hry.gloryapi.backend.constant.CommonConstant;
+import com.hry.gloryapi.backend.mapper.PostFavourMapper;
+import com.hry.gloryapi.backend.mapper.PostMapper;
+import com.hry.gloryapi.backend.mapper.PostThumbMapper;
 import com.hry.gloryapi.backend.model.dto.post.PostEsDTO;
 import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.entity.Post;
 import com.hry.gloryapi.backend.model.entity.PostFavour;
 import com.hry.gloryapi.backend.model.entity.PostThumb;
-import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.model.vo.PostVO;
 import com.hry.gloryapi.backend.model.vo.UserVO;
-import com.hry.gloryapi.backend.utils.SqlUtils;
 import com.hry.gloryapi.backend.service.PostService;
 import com.hry.gloryapi.backend.service.UserService;
-import com.hry.gloryapi.backend.constant.CommonConstant;
-import com.hry.gloryapi.backend.mapper.PostFavourMapper;
-import com.hry.gloryapi.backend.mapper.PostMapper;
-import com.hry.gloryapi.backend.mapper.PostThumbMapper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import com.hry.glory.common.enums.ErrorCode;
+import com.hry.gloryapi.backend.utils.SqlUtils;
+import com.hry.gloryapi.common.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -48,6 +38,11 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 帖子服务实现

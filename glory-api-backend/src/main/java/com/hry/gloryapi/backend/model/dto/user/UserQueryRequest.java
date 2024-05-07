@@ -1,10 +1,10 @@
 package com.hry.gloryapi.backend.model.dto.user;
 
-import com.hry.gloryapi.backend.common.PageRequest;
-
-import java.io.Serializable;
+import com.hry.gloryapi.common.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * 用户查询请求

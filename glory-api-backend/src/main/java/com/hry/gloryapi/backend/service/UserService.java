@@ -3,13 +3,13 @@ package com.hry.gloryapi.backend.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
-import com.hry.gloryapi.backend.model.entity.User;
 import com.hry.gloryapi.backend.model.vo.LoginUserVO;
 import com.hry.gloryapi.backend.model.vo.UserVO;
-
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import com.hry.gloryapi.common.model.entity.User;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户服务

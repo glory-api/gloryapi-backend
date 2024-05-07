@@ -1,8 +1,8 @@
 package com.hry.gloryapi.backend.service;
 
-import com.hry.gloryapi.backend.model.entity.PostThumb;
-import com.hry.gloryapi.backend.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hry.gloryapi.backend.model.entity.PostThumb;
+import com.hry.gloryapi.common.model.entity.User;
 
 /**
  * 帖子点赞服务

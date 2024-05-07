@@ -2,7 +2,7 @@ package com.hry.gloryapi.backend.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hry.gloryapi.backend.model.entity.InterfaceInfo;
+import com.hry.gloryapi.common.model.entity.InterfaceInfo;
 
 /**
 * @author lenovo

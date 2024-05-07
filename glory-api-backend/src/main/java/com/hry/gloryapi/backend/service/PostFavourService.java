@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hry.gloryapi.backend.model.entity.Post;
 import com.hry.gloryapi.backend.model.entity.PostFavour;
-import com.hry.gloryapi.backend.model.entity.User;
+import com.hry.gloryapi.common.model.entity.User;
 
 /**
  * 帖子收藏服务

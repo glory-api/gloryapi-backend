@@ -1,11 +1,11 @@
 package com.hry.gloryapi.backend.aop;
 
-import com.hry.gloryapi.backend.annotation.AuthCheck;
-import com.hry.gloryapi.backend.model.entity.User;
-import com.hry.gloryapi.backend.model.enums.UserRoleEnum;
-import com.hry.gloryapi.backend.service.UserService;
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
+import com.hry.gloryapi.backend.annotation.AuthCheck;
+import com.hry.gloryapi.backend.service.UserService;
+import com.hry.gloryapi.common.model.entity.User;
+import com.hry.gloryapi.common.model.enums.UserRoleEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

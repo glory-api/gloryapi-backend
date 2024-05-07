@@ -1,4 +1,4 @@
-package com.hry.gloryapi.backend.common;
+package com.hry.gloryapi.common.common;
 
 import lombok.Getter;
 import lombok.ToString;
