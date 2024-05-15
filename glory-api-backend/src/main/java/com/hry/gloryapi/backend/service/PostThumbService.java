@@ -28,5 +28,5 @@ public interface PostThumbService extends IService<PostThumb> {
      * @param postId
      * @return
      */
-    int doPostThumbInner(long userId, long postId);
+    int doPostThumbInner(String userId, long postId);
 }

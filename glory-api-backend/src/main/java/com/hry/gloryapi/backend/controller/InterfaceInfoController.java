@@ -15,6 +15,7 @@ import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoQueryRequest
 import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.hry.gloryapi.common.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.common.model.vo.InterfaceInfoVo;
+import com.hry.gloryapi.common.service.InnerUserInterfaceInvokeService;
 import com.hry.gloryapisdk.client.BasicClient;
 import com.hry.gloryapisdk.client.GeneralClientBuild;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * api平台接口信息管理 接口
@@ -38,7 +40,8 @@ public class InterfaceInfoController {
 
     @Resource
     private InterfaceInfoService interfaceInfoService;
-
+    @Resource
+    private InnerUserInterfaceInvokeService innerUserInterfaceInvokeService;
 
     /**
      * 添加信息接口
@@ -48,8 +51,8 @@ public class InterfaceInfoController {
     @ApiOperation("添加接口信息")
     @PostMapping("/admin/add")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addInterfaceInfo(@Validated @RequestBody InterfaceInfoAddRequest interfaceInfoAddRequest){
-        Long id = interfaceInfoService.addInterfaceInfo(interfaceInfoAddRequest);
+    public BaseResponse<String> addInterfaceInfo(@Validated @RequestBody InterfaceInfoAddRequest interfaceInfoAddRequest){
+        String id = interfaceInfoService.addInterfaceInfo(interfaceInfoAddRequest);
         return ResultUtils.success(id);
     }
 
@@ -136,15 +139,18 @@ public class InterfaceInfoController {
         return ResultUtils.success("ok");
     }
 
-    @GetMapping("test")
-    public BaseResponse<String> test(){
+    @GetMapping("/test")
+    public BaseResponse<String> test(HttpServletRequest request){
         GeneralClientBuild clientBuild = new GeneralClientBuild();
-        BasicClient client = clientBuild.ak("11").sk("11").domain("127.0.0.1:9009").build();
+        BasicClient client = clientBuild.ak("5fa29e07dd817a839d9d3c78442391a1").sk("56770f8cf6b9d00bd01a9a896938e232").domain("127.0.0.1:9009").build();
         client.uri("/api/interface/basic/randomNum");
         client.addParam("min",1);
-        client.addParam("max",5);
+        client.addParam("max",2);
+
         String post = client.get();
         return ResultUtils.success(post);
+//        boolean b = innerUserInterfaceInvokeService.afterInvoke("1", "1", 2);
+//        return ResultUtils.success(b);
     }
 
 }

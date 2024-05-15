@@ -1,13 +1,22 @@
 package com.hry.gloryapi.backend.service.impl.inner;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
+import com.hry.glory.common.enums.ErrorCode;
+import com.hry.glory.common.exception.BusinessException;
+import com.hry.glory.common.model.dto.BaseResponse;
+import com.hry.glory.common.utils.ResultUtils;
 import com.hry.gloryapi.backend.service.InterfaceInfoService;
+import com.hry.gloryapi.backend.utils.SpringContextUtils;
+import com.hry.gloryapi.common.exception.ApiBusinessException;
 import com.hry.gloryapi.common.model.entity.InterfaceInfo;
 import com.hry.gloryapi.common.service.InnerInterfaceInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -29,9 +38,12 @@ public class InnerInterfaceInfoServiceImpl implements InnerInterfaceInfoService 
     public InterfaceInfo getInterfaceInfoByUrlAndMethod(String url, String method) {
         //参数校验
         if(StringUtils.isAnyBlank(url,method)){
-
+            throw new ApiBusinessException(ErrorCode.PARAMS_ERROR,"参数不能为空");
         }
-        System.out.println(url+method);
-        return null;
+        LambdaQueryWrapper<InterfaceInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(InterfaceInfo::getUrl,url).eq(InterfaceInfo::getMethod,method);
+        InterfaceInfo interfaceInfo = interfaceInfoService.getOne(wrapper);
+        return interfaceInfo;
     }
+
 }

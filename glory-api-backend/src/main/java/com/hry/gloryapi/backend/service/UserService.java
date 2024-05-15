@@ -3,8 +3,8 @@ package com.hry.gloryapi.backend.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
-import com.hry.gloryapi.backend.model.vo.LoginUserVO;
-import com.hry.gloryapi.backend.model.vo.UserVO;
+import com.hry.gloryapi.backend.model.vo.LoginUserVo;
+import com.hry.gloryapi.common.model.vo.UserVo;
 import com.hry.gloryapi.common.model.entity.User;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 
@@ -27,7 +27,7 @@ public interface UserService extends IService<User> {
      * @param checkPassword 校验密码
      * @return 新用户 id
      */
-    long userRegister(String userAccount, String userPassword, String checkPassword);
+    String userRegister(String userAccount, String userPassword, String checkPassword);
 
     /**
      * 用户登录
@@ -37,7 +37,7 @@ public interface UserService extends IService<User> {
      * @param request
      * @return 脱敏后的用户信息
      */
-    LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request);
+    LoginUserVo userLogin(String userAccount, String userPassword, HttpServletRequest request);
 
     /**
      * 用户登录（微信开放平台）
@@ -46,7 +46,7 @@ public interface UserService extends IService<User> {
      * @param request
      * @return 脱敏后的用户信息
      */
-    LoginUserVO userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo, HttpServletRequest request);
+    LoginUserVo userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo, HttpServletRequest request);
 
     /**
      * 获取当前登录用户
@@ -65,7 +65,7 @@ public interface UserService extends IService<User> {
     User getLoginUserPermitNull(HttpServletRequest request);
 
     /**
-     * 是否为管理员
+     * 当前用户是否为管理员
      *
      * @param request
      * @return
@@ -73,7 +73,7 @@ public interface UserService extends IService<User> {
     boolean isAdmin(HttpServletRequest request);
 
     /**
-     * 是否为管理员
+     * 查询某用户是否为管理员
      *
      * @param user
      * @return
@@ -101,7 +101,7 @@ public interface UserService extends IService<User> {
      *
      * @return
      */
-    LoginUserVO getLoginUserVO(User user);
+    LoginUserVo getLoginUserVO(User user);
 
     /**
      * 获取脱敏的用户信息
@@ -109,15 +109,31 @@ public interface UserService extends IService<User> {
      * @param user
      * @return
      */
-    UserVO getUserVO(User user);
+    UserVo getUserVO(User user);
 
     /**
-     * 获取脱敏的用户信息
+     * 获取脱敏的用户信息列表
      *
      * @param userList
      * @return
      */
-    List<UserVO> getUserVO(List<User> userList);
+    List<UserVo> getUserVO(List<User> userList);
+
+    /**
+     * 减少用户积分
+     * @param userId
+     * @param increaseScore
+     * @return
+     */
+    boolean increaseIntegral(String userId, Integer increaseScore);
+
+    /**
+     * 减少用户积分
+     * @param userId
+     * @param reduceScore
+     * @return
+     */
+    boolean reduceIntegral(String userId, Integer reduceScore);
 
     /**
      * 获取查询条件

@@ -1,5 +1,6 @@
 package com.hry.gloryapi.common.service;
 
+import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.gloryapi.common.model.entity.InterfaceInfo;
 
 /**
@@ -14,5 +15,5 @@ public interface InnerInterfaceInfoService {
      * @param method
      * @return
      */
-    InterfaceInfo getInterfaceInfoByUrlAndMethod(String url,String method);
+    InterfaceInfo getInterfaceInfoByUrlAndMethod(String url, String method);
 }

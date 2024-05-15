@@ -13,6 +13,7 @@ import com.hry.gloryapi.backend.model.entity.PostFavour;
 import com.hry.gloryapi.backend.service.PostFavourService;
 import com.hry.gloryapi.backend.service.PostService;
 import com.hry.gloryapi.common.model.entity.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,7 @@ public class PostFavourServiceImpl extends ServiceImpl<PostFavourMapper, PostFav
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         // 是否已帖子收藏
-        long userId = loginUser.getId();
+        String userId = loginUser.getId();
         // 每个用户串行帖子收藏
         // 锁必须要包裹住事务方法
         PostFavourService postFavourService = (PostFavourService) AopContext.currentProxy();
@@ -57,8 +58,8 @@ public class PostFavourServiceImpl extends ServiceImpl<PostFavourMapper, PostFav
     }
 
     @Override
-    public Page<Post> listFavourPostByPage(IPage<Post> page, Wrapper<Post> queryWrapper, long favourUserId) {
-        if (favourUserId <= 0) {
+    public Page<Post> listFavourPostByPage(IPage<Post> page, Wrapper<Post> queryWrapper, String favourUserId) {
+        if (StringUtils.isBlank(favourUserId)) {
             return new Page<>();
         }
         return baseMapper.listFavourPostByPage(page, queryWrapper, favourUserId);
@@ -73,7 +74,7 @@ public class PostFavourServiceImpl extends ServiceImpl<PostFavourMapper, PostFav
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int doPostFavourInner(long userId, long postId) {
+    public int doPostFavourInner(String userId, long postId) {
         PostFavour postFavour = new PostFavour();
         postFavour.setUserId(userId);
         postFavour.setPostId(postId);

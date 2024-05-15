@@ -14,7 +14,7 @@ import com.hry.gloryapi.backend.model.dto.post.PostEditRequest;
 import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.dto.post.PostUpdateRequest;
 import com.hry.gloryapi.backend.model.entity.Post;
-import com.hry.gloryapi.backend.model.vo.PostVO;
+import com.hry.gloryapi.backend.model.vo.PostVo;
 import com.hry.gloryapi.backend.service.PostService;
 import com.hry.gloryapi.backend.service.UserService;
 import com.hry.gloryapi.common.common.IdRequest;
@@ -137,7 +137,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/get/vo")
-    public BaseResponse<PostVO> getPostVOById(long id, HttpServletRequest request) {
+    public BaseResponse<PostVo> getPostVOById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -156,8 +156,8 @@ public class PostController {
      * @return
      */
     @PostMapping("/list/page/vo")
-    public BaseResponse<Page<PostVO>> listPostVOByPage(@RequestBody PostQueryRequest postQueryRequest,
-            HttpServletRequest request) {
+    public BaseResponse<Page<PostVo>> listPostVOByPage(@RequestBody PostQueryRequest postQueryRequest,
+                                                       HttpServletRequest request) {
         long current = postQueryRequest.getCurrent();
         long size = postQueryRequest.getPageSize();
         // 限制爬虫
@@ -175,8 +175,8 @@ public class PostController {
      * @return
      */
     @PostMapping("/my/list/page/vo")
-    public BaseResponse<Page<PostVO>> listMyPostVOByPage(@RequestBody PostQueryRequest postQueryRequest,
-            HttpServletRequest request) {
+    public BaseResponse<Page<PostVo>> listMyPostVOByPage(@RequestBody PostQueryRequest postQueryRequest,
+                                                         HttpServletRequest request) {
         if (postQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -201,8 +201,8 @@ public class PostController {
      * @return
      */
     @PostMapping("/search/page/vo")
-    public BaseResponse<Page<PostVO>> searchPostVOByPage(@RequestBody PostQueryRequest postQueryRequest,
-            HttpServletRequest request) {
+    public BaseResponse<Page<PostVo>> searchPostVOByPage(@RequestBody PostQueryRequest postQueryRequest,
+                                                         HttpServletRequest request) {
         long size = postQueryRequest.getPageSize();
         // 限制爬虫
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);

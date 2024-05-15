@@ -1,5 +1,6 @@
 package com.hry.gloryapi.gateway.exception;
 
+import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hry.glory.common.exception.BusinessException;
@@ -36,17 +37,27 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         ServerHttpResponse response = exchange.getResponse();
         HttpHeaders headers = response.getHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        //如果响应已完成
         if (response.isCommitted()) {
             return Mono.error(ex);
         }
         DataBufferFactory bufferFactory = response.bufferFactory();
-        response.setStatusCode(HttpStatus.FORBIDDEN);
-        int bodyCode = HttpStatus.FORBIDDEN.value();
+        int bodyCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        String errorMsg = "";
+        //如果是业务异常，修改响应状态码为无权限，返回业务异常异常信息
         if(ex instanceof BusinessException){
+            response.setStatusCode(HttpStatus.FORBIDDEN);
             bodyCode = ((BusinessException) ex).getCode();
+            errorMsg = ex.getMessage();
+        }else {
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            errorMsg = "系统异常,请联系管理员";
         }
-        BaseResponse<Boolean> error = ResultUtils.error(bodyCode, ex.getMessage());
-        log.error("【网关异常】：{}", error);
+
+        log.error("【网关异常】：⬇\n{}", Throwables.getStackTraceAsString(ex));
+
+        BaseResponse<Boolean> error = ResultUtils.error(bodyCode, errorMsg);
+
         try {
             byte[] errorBytes = objectMapper.writeValueAsBytes(error);
             DataBuffer dataBuffer = bufferFactory.wrap(errorBytes);

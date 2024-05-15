@@ -7,6 +7,8 @@ import com.hry.gloryapi.backend.model.entity.Post;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import com.hry.gloryapi.common.model.vo.UserVo;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -17,7 +19,7 @@ import org.springframework.beans.BeanUtils;
  * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @Data
-public class PostVO implements Serializable {
+public class PostVo implements Serializable {
 
     private final static Gson GSON = new Gson();
 
@@ -69,7 +71,7 @@ public class PostVO implements Serializable {
     /**
      * 创建人信息
      */
-    private UserVO user;
+    private UserVo user;
 
     /**
      * 是否已点赞
@@ -87,7 +89,7 @@ public class PostVO implements Serializable {
      * @param postVO
      * @return
      */
-    public static Post voToObj(PostVO postVO) {
+    public static Post voToObj(PostVo postVO) {
         if (postVO == null) {
             return null;
         }
@@ -106,11 +108,11 @@ public class PostVO implements Serializable {
      * @param post
      * @return
      */
-    public static PostVO objToVo(Post post) {
+    public static PostVo objToVo(Post post) {
         if (post == null) {
             return null;
         }
-        PostVO postVO = new PostVO();
+        PostVo postVO = new PostVo();
         BeanUtils.copyProperties(post, postVO);
         postVO.setTagList(GSON.fromJson(post.getTags(), new TypeToken<List<String>>() {
         }.getType()));

@@ -30,6 +30,7 @@ public class SimpleInterfaceController {
     public BaseResponse<Long> getRandomNum(long min, long max){
         ThrowUtils.throwIf(max<=min, new BusinessException(ErrorCode.PARAMS_ERROR,"最大值小于等于最小值"));
         SecureRandom random = new SecureRandom("RandomNum".getBytes(StandardCharsets.UTF_8));
-        return ResultUtils.success(random.nextLong(max - min)+min);
+//        throw new BusinessException(ErrorCode.OPERATION_ERROR,"测试");
+        return ResultUtils.success(random.nextLong(min,max+1));
     }
 }

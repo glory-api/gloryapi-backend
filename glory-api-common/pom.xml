@@ -18,6 +18,10 @@
     
     <dependencies>
         <dependency>
+            <groupId>com.hry</groupId>
+            <artifactId>glory-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
             <version>3.5.3.2</version>

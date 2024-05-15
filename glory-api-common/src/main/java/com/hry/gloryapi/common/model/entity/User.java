@@ -24,7 +24,7 @@ public class User implements Serializable {
      * id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     /**
      * 用户账号
@@ -75,6 +75,11 @@ public class User implements Serializable {
      * 密钥
      */
     private String secretKey;
+
+    /**
+     * 用户积分
+     */
+    private Integer integral = 0;
 
     /**
      * 创建时间

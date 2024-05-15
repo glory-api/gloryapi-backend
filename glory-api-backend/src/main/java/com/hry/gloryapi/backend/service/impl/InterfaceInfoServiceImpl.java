@@ -51,7 +51,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     }
 
     @Override
-    public Long addInterfaceInfo(InterfaceInfoAddRequest interfaceInfoAddRequest) {
+    public String addInterfaceInfo(InterfaceInfoAddRequest interfaceInfoAddRequest) {
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         BeanUtil.copyProperties(interfaceInfoAddRequest, interfaceInfo, "requestParams", "responseParams");
         interfaceInfo.setRequestParams(GSON.toJson(interfaceInfoAddRequest.getRequestParams(),new TypeToken<List<InterfaceRequestParam>>() {}.getType()));

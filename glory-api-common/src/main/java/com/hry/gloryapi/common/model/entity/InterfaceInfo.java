@@ -19,7 +19,7 @@ public class InterfaceInfo implements Serializable {
      * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     /**
      * 名称
@@ -67,7 +67,7 @@ public class InterfaceInfo implements Serializable {
     private String responseExample;
 
     /**
-     * 接口状态（0-关闭，2-开启）
+     * 接口状态（0-关闭，1-开启）
      */
     private String status;
 
@@ -77,9 +77,14 @@ public class InterfaceInfo implements Serializable {
     private String method;
 
     /**
+     * 积分
+     */
+    private Integer integral;
+
+    /**
      * 创建人
      */
-    private Long userid;
+    private String userid;
 
     /**
      * 创建时间

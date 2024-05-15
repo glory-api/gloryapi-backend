@@ -10,7 +10,7 @@ import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.dto.postfavour.PostFavourAddRequest;
 import com.hry.gloryapi.backend.model.dto.postfavour.PostFavourQueryRequest;
 import com.hry.gloryapi.backend.model.entity.Post;
-import com.hry.gloryapi.backend.model.vo.PostVO;
+import com.hry.gloryapi.backend.model.vo.PostVo;
 import com.hry.gloryapi.backend.service.PostFavourService;
 import com.hry.gloryapi.backend.service.PostService;
 import com.hry.gloryapi.backend.service.UserService;
@@ -71,7 +71,7 @@ public class PostFavourController {
      * @param request
      */
     @PostMapping("/my/list/page")
-    public BaseResponse<Page<PostVO>> listMyFavourPostByPage(@RequestBody PostQueryRequest postQueryRequest,
+    public BaseResponse<Page<PostVo>> listMyFavourPostByPage(@RequestBody PostQueryRequest postQueryRequest,
                                                              HttpServletRequest request) {
         if (postQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -93,14 +93,14 @@ public class PostFavourController {
      * @param request
      */
     @PostMapping("/list/page")
-    public BaseResponse<Page<PostVO>> listFavourPostByPage(@RequestBody PostFavourQueryRequest postFavourQueryRequest,
-            HttpServletRequest request) {
+    public BaseResponse<Page<PostVo>> listFavourPostByPage(@RequestBody PostFavourQueryRequest postFavourQueryRequest,
+                                                           HttpServletRequest request) {
         if (postFavourQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         long current = postFavourQueryRequest.getCurrent();
         long size = postFavourQueryRequest.getPageSize();
-        Long userId = postFavourQueryRequest.getUserId();
+        String userId = postFavourQueryRequest.getUserId();
         // 限制爬虫
         ThrowUtils.throwIf(size > 20 || userId == null, ErrorCode.PARAMS_ERROR);
         Page<Post> postPage = postFavourService.listFavourPostByPage(new Page<>(current, size),

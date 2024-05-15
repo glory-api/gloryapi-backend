@@ -1,25 +1,23 @@
-package com.hry.gloryapi.backend.model.vo;
+package com.hry.gloryapi.common.model.vo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * 已登录用户视图（脱敏）
+ * 用户视图（脱敏）
  *
  * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
  * @from <a href="https://yupi.icu">编程导航知识星球</a>
- **/
+ */
 @Data
-public class LoginUserVO implements Serializable {
+public class UserVo implements Serializable {
 
     /**
-     * 用户 id
+     * id
      */
-    private Long id;
+    private String id;
 
     /**
      * 用户昵称
@@ -37,19 +35,29 @@ public class LoginUserVO implements Serializable {
     private String userProfile;
 
     /**
+     * 开发者凭证
+     */
+    private String accessKey;
+
+    /**
+     * 密钥
+     */
+    private String secretKey;
+
+    /**
      * 用户角色：user/admin/ban
      */
     private String userRole;
 
     /**
+     * 用户积分
+     */
+    private Integer integral;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
 
     private static final long serialVersionUID = 1L;
 }

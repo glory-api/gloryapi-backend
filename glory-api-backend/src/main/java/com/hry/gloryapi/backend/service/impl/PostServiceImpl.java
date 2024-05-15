@@ -16,8 +16,8 @@ import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.entity.Post;
 import com.hry.gloryapi.backend.model.entity.PostFavour;
 import com.hry.gloryapi.backend.model.entity.PostThumb;
-import com.hry.gloryapi.backend.model.vo.PostVO;
-import com.hry.gloryapi.backend.model.vo.UserVO;
+import com.hry.gloryapi.backend.model.vo.PostVo;
+import com.hry.gloryapi.common.model.vo.UserVo;
 import com.hry.gloryapi.backend.service.PostService;
 import com.hry.gloryapi.backend.service.UserService;
 import com.hry.gloryapi.backend.utils.SqlUtils;
@@ -108,7 +108,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         String title = postQueryRequest.getTitle();
         String content = postQueryRequest.getContent();
         List<String> tagList = postQueryRequest.getTags();
-        Long userId = postQueryRequest.getUserId();
+        String userId = postQueryRequest.getUserId();
         Long notId = postQueryRequest.getNotId();
         // 拼接查询条件
         if (StringUtils.isNotBlank(searchText)) {
@@ -139,7 +139,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         String content = postQueryRequest.getContent();
         List<String> tagList = postQueryRequest.getTags();
         List<String> orTagList = postQueryRequest.getOrTags();
-        Long userId = postQueryRequest.getUserId();
+        String userId = postQueryRequest.getUserId();
         // es 起始页为 0
         long current = postQueryRequest.getCurrent() - 1;
         long pageSize = postQueryRequest.getPageSize();
@@ -228,16 +228,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
-    public PostVO getPostVO(Post post, HttpServletRequest request) {
-        PostVO postVO = PostVO.objToVo(post);
+    public PostVo getPostVO(Post post, HttpServletRequest request) {
+        PostVo postVO = PostVo.objToVo(post);
         long postId = post.getId();
         // 1. 关联查询用户信息
-        Long userId = post.getUserId();
+        String userId = post.getUserId();
         User user = null;
-        if (userId != null && userId > 0) {
+        if (StringUtils.isNotBlank(userId)) {
             user = userService.getById(userId);
         }
-        UserVO userVO = userService.getUserVO(user);
+        UserVo userVO = userService.getUserVO(user);
         postVO.setUser(userVO);
         // 2. 已登录，获取用户点赞、收藏状态
         User loginUser = userService.getLoginUserPermitNull(request);
@@ -259,15 +259,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
-    public Page<PostVO> getPostVOPage(Page<Post> postPage, HttpServletRequest request) {
+    public Page<PostVo> getPostVOPage(Page<Post> postPage, HttpServletRequest request) {
         List<Post> postList = postPage.getRecords();
-        Page<PostVO> postVOPage = new Page<>(postPage.getCurrent(), postPage.getSize(), postPage.getTotal());
+        Page<PostVo> postVOPage = new Page<>(postPage.getCurrent(), postPage.getSize(), postPage.getTotal());
         if (CollectionUtils.isEmpty(postList)) {
             return postVOPage;
         }
         // 1. 关联查询用户信息
-        Set<Long> userIdSet = postList.stream().map(Post::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Set<String> userIdSet = postList.stream().map(Post::getUserId).collect(Collectors.toSet());
+        Map<String, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 2. 已登录，获取用户点赞、收藏状态
         Map<Long, Boolean> postIdHasThumbMap = new HashMap<>();
@@ -290,9 +290,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             postFavourList.forEach(postFavour -> postIdHasFavourMap.put(postFavour.getPostId(), true));
         }
         // 填充信息
-        List<PostVO> postVOList = postList.stream().map(post -> {
-            PostVO postVO = PostVO.objToVo(post);
-            Long userId = post.getUserId();
+        List<PostVo> postVoList = postList.stream().map(post -> {
+            PostVo postVO = PostVo.objToVo(post);
+            String userId = post.getUserId();
             User user = null;
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
@@ -302,7 +302,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             postVO.setHasFavour(postIdHasFavourMap.getOrDefault(post.getId(), false));
             return postVO;
         }).collect(Collectors.toList());
-        postVOPage.setRecords(postVOList);
+        postVOPage.setRecords(postVoList);
         return postVOPage;
     }
 

@@ -34,7 +34,7 @@ public interface PostFavourService extends IService<PostFavour> {
      * @return
      */
     Page<Post> listFavourPostByPage(IPage<Post> page, Wrapper<Post> queryWrapper,
-                                    long favourUserId);
+                                    String favourUserId);
 
     /**
      * 帖子收藏（内部服务）
@@ -43,5 +43,5 @@ public interface PostFavourService extends IService<PostFavour> {
      * @param postId
      * @return
      */
-    int doPostFavourInner(long userId, long postId);
+    int doPostFavourInner(String userId, long postId);
 }

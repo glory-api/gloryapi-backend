@@ -2,6 +2,7 @@ package com.hry.gloryapi.backend.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hry.glory.common.enums.ErrorCode;
@@ -9,8 +10,8 @@ import com.hry.glory.common.exception.BusinessException;
 import com.hry.gloryapi.backend.constant.CommonConstant;
 import com.hry.gloryapi.backend.mapper.UserMapper;
 import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
-import com.hry.gloryapi.backend.model.vo.LoginUserVO;
-import com.hry.gloryapi.backend.model.vo.UserVO;
+import com.hry.gloryapi.backend.model.vo.LoginUserVo;
+import com.hry.gloryapi.common.model.vo.UserVo;
 import com.hry.gloryapi.backend.service.UserService;
 import com.hry.gloryapi.backend.utils.SqlUtils;
 import com.hry.gloryapi.common.model.entity.User;
@@ -20,6 +21,7 @@ import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private static final String SALT = "glory";
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+    public String userRegister(String userAccount, String userPassword, String checkPassword) {
         // 1. 校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
@@ -73,8 +75,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             // 2. 加密
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-            String accessKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomNumbers(5)+ LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"))).getBytes());
-            String secretKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomNumbers(6)+ LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"))).getBytes());
+            String accessKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomNumbers(5) + LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"))).getBytes());
+            String secretKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomNumbers(6) + LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"))).getBytes());
             // 3. 插入数据
             User user = new User();
             user.setUserAccount(userAccount);
@@ -91,7 +93,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request) {
+    public LoginUserVo userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         // 1. 校验
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
@@ -115,7 +117,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
         //用户被禁用
-        if (isBan(user)){
+        if (isBan(user)) {
             log.info("user login failed, userAccount is Disabled");
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "用户被禁用");
         }
@@ -126,7 +128,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public LoginUserVO userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo, HttpServletRequest request) {
+    public LoginUserVo userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo, HttpServletRequest request) {
         String unionId = wxOAuth2UserInfo.getUnionId();
         String mpOpenId = wxOAuth2UserInfo.getOpenid();
         // 单机锁
@@ -172,7 +174,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         // 从数据库查询（追求性能的话可以注释，直接走缓存）
-        long userId = currentUser.getId();
+        String userId = currentUser.getId();
         currentUser = this.getById(userId);
         if (currentUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
@@ -195,16 +197,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         // 从数据库查询（追求性能的话可以注释，直接走缓存）
-        long userId = currentUser.getId();
+        String userId = currentUser.getId();
         return this.getById(userId);
     }
 
-    /**
-     * 是否为管理员
-     *
-     * @param request
-     * @return
-     */
+
     @Override
     public boolean isAdmin(HttpServletRequest request) {
         // 仅管理员可查询
@@ -225,7 +222,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户注销
-     * 
+     *
      * @param request
      */
     @Override
@@ -239,31 +236,48 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public LoginUserVO getLoginUserVO(User user) {
+    public LoginUserVo getLoginUserVO(User user) {
         if (user == null) {
             return null;
         }
-        LoginUserVO loginUserVO = new LoginUserVO();
+        LoginUserVo loginUserVO = new LoginUserVo();
         BeanUtils.copyProperties(user, loginUserVO);
         return loginUserVO;
     }
 
     @Override
-    public UserVO getUserVO(User user) {
+    public UserVo getUserVO(User user) {
         if (user == null) {
             return null;
         }
-        UserVO userVO = new UserVO();
+        UserVo userVO = new UserVo();
         BeanUtils.copyProperties(user, userVO);
         return userVO;
     }
 
     @Override
-    public List<UserVO> getUserVO(List<User> userList) {
+    public List<UserVo> getUserVO(List<User> userList) {
         if (CollectionUtils.isEmpty(userList)) {
             return new ArrayList<>();
         }
         return userList.stream().map(this::getUserVO).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean increaseIntegral(String userId, Integer increaseScore) {
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getId, userId);
+        wrapper.setSql("integral = integral + {0}",increaseScore);
+        return update(wrapper);
+    }
+
+    @Transactional
+    @Override
+    public boolean reduceIntegral(String userId, Integer reduceScore) {
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getId, userId);
+        wrapper.setSql("integral = integral - {0}",reduceScore);
+        return update(wrapper);
     }
 
     @Override
@@ -286,8 +300,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq(StringUtils.isNotBlank(userRole), "userRole", userRole);
         queryWrapper.like(StringUtils.isNotBlank(userProfile), "userProfile", userProfile);
         queryWrapper.like(StringUtils.isNotBlank(userName), "userName", userName);
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField,User.class), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
+        queryWrapper.orderBy(SqlUtils.validSortField(sortField, User.class), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
+            sortField);
         return queryWrapper;
     }
 }

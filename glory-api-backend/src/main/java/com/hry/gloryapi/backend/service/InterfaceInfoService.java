@@ -28,7 +28,7 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      * @param interfaceInfoAddRequest
      * @return
      */
-    Long addInterfaceInfo(InterfaceInfoAddRequest interfaceInfoAddRequest);
+    String addInterfaceInfo(InterfaceInfoAddRequest interfaceInfoAddRequest);
 
     /**
      * 修改接口状态

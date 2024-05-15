@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hry.gloryapi.backend.model.dto.post.PostQueryRequest;
 import com.hry.gloryapi.backend.model.entity.Post;
-import com.hry.gloryapi.backend.model.vo.PostVO;
+import com.hry.gloryapi.backend.model.vo.PostVo;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,7 +48,7 @@ public interface PostService extends IService<Post> {
      * @param request
      * @return
      */
-    PostVO getPostVO(Post post, HttpServletRequest request);
+    PostVo getPostVO(Post post, HttpServletRequest request);
 
     /**
      * 分页获取帖子封装
@@ -57,5 +57,5 @@ public interface PostService extends IService<Post> {
      * @param request
      * @return
      */
-    Page<PostVO> getPostVOPage(Page<Post> postPage, HttpServletRequest request);
+    Page<PostVo> getPostVOPage(Page<Post> postPage, HttpServletRequest request);
 }
