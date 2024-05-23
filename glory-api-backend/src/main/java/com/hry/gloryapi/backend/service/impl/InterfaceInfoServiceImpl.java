@@ -2,6 +2,7 @@ package com.hry.gloryapi.backend.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,9 +20,13 @@ import com.hry.gloryapi.common.common.IdRequest;
 import com.hry.gloryapi.common.common.PageResponse;
 import com.hry.gloryapi.common.model.dto.interfaceinfo.*;
 import com.hry.gloryapi.common.model.entity.InterfaceInfo;
+import com.hry.gloryapi.common.model.entity.User;
 import com.hry.gloryapi.common.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.common.model.vo.InterfaceInfoVo;
+import com.hry.gloryapisdk.client.BasicClient;
+import com.hry.gloryapisdk.client.build.GeneralClientBuild;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -39,14 +44,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo> implements InterfaceInfoService {
     private static final Gson GSON = new Gson();
-    
+
 
     @Override
     public PageResponse<InterfaceInfoVo> listInterfaceInfoVoByPage(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
         Page<InterfaceInfo> page = new Page<>(interfaceInfoQueryRequest.getCurrent(), interfaceInfoQueryRequest.getPageSize());
         QueryWrapper<InterfaceInfo> queryWrapper = getListQueryWrapper(interfaceInfoQueryRequest);
         Page<InterfaceInfo> resultPage = baseMapper.selectPage(page, queryWrapper);
-        
+
         return toPageVo(resultPage);
     }
 
@@ -54,8 +59,10 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public String addInterfaceInfo(InterfaceInfoAddRequest interfaceInfoAddRequest) {
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         BeanUtil.copyProperties(interfaceInfoAddRequest, interfaceInfo, "requestParams", "responseParams");
-        interfaceInfo.setRequestParams(GSON.toJson(interfaceInfoAddRequest.getRequestParams(),new TypeToken<List<InterfaceRequestParam>>() {}.getType()));
-        interfaceInfo.setResponseParams(GSON.toJson(interfaceInfoAddRequest.getResponseParams(),new TypeToken<List<InterfaceRequestParam>>() {}.getType()));
+        interfaceInfo.setRequestParams(GSON.toJson(interfaceInfoAddRequest.getRequestParams(), new TypeToken<List<InterfaceRequestParam>>() {
+        }.getType()));
+        interfaceInfo.setResponseParams(GSON.toJson(interfaceInfoAddRequest.getResponseParams(), new TypeToken<List<InterfaceRequestParam>>() {
+        }.getType()));
         interfaceInfo.setUserid(UserContext.getLoginUser().getId());
         baseMapper.insert(interfaceInfo);
         return interfaceInfo.getId();
@@ -65,44 +72,46 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public int updateStatus(IdRequest idRequest) {
         //检验接口是否存在
         InterfaceInfo interfaceInfo = baseMapper.selectById(idRequest.getId());
-        if(Objects.isNull(interfaceInfo)){
+        if (Objects.isNull(interfaceInfo)) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         //发布接口 要测试接口
-        if(interfaceInfo.getStatus().equals(InterfaceStatusEnum.OFF.getCode())){
+        if (interfaceInfo.getStatus().equals(InterfaceStatusEnum.OFF.getCode())) {
             // TODO: 2023/10/24 调用接口
             interfaceInfo.setStatus("1");
-            log.info("{}接口发布",interfaceInfo.getId());
-        }else {
+            log.info("{}接口发布", interfaceInfo.getId());
+        } else {
             interfaceInfo.setStatus("0");
-            log.info("{}接口下线",interfaceInfo.getId());
+            log.info("{}接口下线", interfaceInfo.getId());
         }
 
         int result = baseMapper.updateById(interfaceInfo);
-        ThrowUtils.throwIf(result<=0,ErrorCode.SYSTEM_ERROR,"更新状态失败，数据库错误");
+        ThrowUtils.throwIf(result <= 0, ErrorCode.SYSTEM_ERROR, "更新状态失败，数据库错误");
         return result;
     }
 
     @Override
     public int updateInterfaceInfo(InterfaceInfoUpdateRequest interfaceInfoUpdateRequest) {
         InterfaceInfo oldInterfaceInfo = baseMapper.selectById(interfaceInfoUpdateRequest.getId());
-        ThrowUtils.throwIf(Objects.isNull(oldInterfaceInfo),ErrorCode.NOT_FOUND_ERROR);
+        ThrowUtils.throwIf(Objects.isNull(oldInterfaceInfo), ErrorCode.NOT_FOUND_ERROR);
         InterfaceInfo newInterfaceInfo = new InterfaceInfo();
         BeanUtil.copyProperties(interfaceInfoUpdateRequest, newInterfaceInfo, "requestParams", "responseParams");
-        newInterfaceInfo.setRequestParams(GSON.toJson(interfaceInfoUpdateRequest.getRequestParams(),new TypeToken<List<InterfaceRequestParam>>() {}.getType()));
-        newInterfaceInfo.setResponseParams(GSON.toJson(interfaceInfoUpdateRequest.getResponseParams(),new TypeToken<List<InterfaceRequestParam>>() {}.getType()));
+        newInterfaceInfo.setRequestParams(GSON.toJson(interfaceInfoUpdateRequest.getRequestParams(), new TypeToken<List<InterfaceRequestParam>>() {
+        }.getType()));
+        newInterfaceInfo.setResponseParams(GSON.toJson(interfaceInfoUpdateRequest.getResponseParams(), new TypeToken<List<InterfaceRequestParam>>() {
+        }.getType()));
         int result = baseMapper.updateById(newInterfaceInfo);
-        ThrowUtils.throwIf(result<=0,ErrorCode.SYSTEM_ERROR,"更新接口信息失败，数据库错误");
+        ThrowUtils.throwIf(result <= 0, ErrorCode.SYSTEM_ERROR, "更新接口信息失败，数据库错误");
         return result;
     }
 
     @Override
     public int deleteIntefaceInfo(IdRequest idRequest) {
         InterfaceInfo interfaceInfo = baseMapper.selectById(idRequest.getId());
-        ThrowUtils.throwIf(Objects.isNull(interfaceInfo),ErrorCode.NOT_FOUND_ERROR);
-        if(interfaceInfo.getIsDelete() == 0){
+        ThrowUtils.throwIf(Objects.isNull(interfaceInfo), ErrorCode.NOT_FOUND_ERROR);
+        if (interfaceInfo.getIsDelete() == 0) {
             int result = baseMapper.deleteById(idRequest.getId());
-            ThrowUtils.throwIf(result<=0,ErrorCode.SYSTEM_ERROR,"删除接口信息失败，数据库错误");
+            ThrowUtils.throwIf(result <= 0, ErrorCode.SYSTEM_ERROR, "删除接口信息失败，数据库错误");
             return result;
         }
         return 0;
@@ -120,7 +129,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String sortOrder = interfaceInfoQueryRequest.getSortOrder();
 
         //排序默认 创建时间 降序
-        if(!SqlUtils.validSortField(sortField,InterfaceInfo.class)){
+        if (!SqlUtils.validSortField(sortField, InterfaceInfo.class)) {
             sortField = "createTime";
             sortOrder = CommonConstant.SORT_ORDER_DESC;
         }
@@ -131,13 +140,13 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         wrapper.like(StringUtils.isNotBlank(url), "url", url);
         wrapper.eq(StringUtils.isNotBlank(status), "status", status);
         wrapper.eq(StringUtils.isNotBlank(method), "method", method);
-        wrapper.orderBy(SqlUtils.validSortField(sortField,InterfaceInfo.class), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
+        wrapper.orderBy(SqlUtils.validSortField(sortField, InterfaceInfo.class), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
         return wrapper;
     }
 
     @Override
     public PageResponse<InterfaceInfoVo> toPageVo(Page<InterfaceInfo> page) {
-        PageResponse<InterfaceInfoVo> pageVo= new PageResponse<>();
+        PageResponse<InterfaceInfoVo> pageVo = new PageResponse<>();
         //查询结果为空
         if (CollectionUtils.isEmpty(page.getRecords())) {
             return pageVo;
@@ -155,9 +164,55 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         BeanUtil.copyProperties(interfaceInfo, interfaceInfoVo, "requestParams", "responseParams");
         //json串转集合对象
         interfaceInfoVo.setRequestParams(GSON.fromJson(interfaceInfo.getRequestParams(),
-                new TypeToken<List<InterfaceRequestParam>>() {}.getType()));
+            new TypeToken<List<InterfaceRequestParam>>() {
+            }.getType()));
         interfaceInfoVo.setResponseParams(GSON.fromJson(interfaceInfo.getResponseParams(),
-                new TypeToken<List<InterfaceResponseParam>>() {}.getType()));
+            new TypeToken<List<InterfaceResponseParam>>() {
+            }.getType()));
         return interfaceInfoVo;
+    }
+
+    @Override
+    public String onlineTest(TestInvokeRequest testInvokeRequest) {
+        //校验参数
+        if (ObjectUtils.anyNull(testInvokeRequest, testInvokeRequest.getInterfaceId()) || StringUtils.isBlank(testInvokeRequest.getInterfaceId())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        //校验接口是否存在
+        LambdaQueryWrapper<InterfaceInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(InterfaceInfo::getId, testInvokeRequest.getInterfaceId());
+        InterfaceInfo interfaceInfo = this.getOne(wrapper);
+        if (interfaceInfo == null || InterfaceStatusEnum.isOff(interfaceInfo.getStatus())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口不存在");
+        }
+
+        /*
+        防止恶意刷接口，导致接口超调，积分超扣的问题，加锁
+         */
+
+        //校验用户积分是否充足
+        User loginUser = UserContext.getLoginUser();
+        if (StringUtils.isAnyBlank(loginUser.getAccessKey(), loginUser.getSecretKey())) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "请先获取开发者凭证");
+        }
+        if (loginUser.getIntegral() <= 0) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "积分不足");
+        }
+
+
+        //使用SDK
+        List<TestInvokeRequest.Field> fileds = testInvokeRequest.getRequestParams();
+        GeneralClientBuild clientBuild = new GeneralClientBuild("127.0.0.1:9009",loginUser.getAccessKey(),loginUser.getSecretKey());
+        BasicClient client = clientBuild.build();
+        client.uri("/api/interface/basic/randomNum");
+        if(!CollectionUtils.isEmpty(fileds)){
+            fileds.forEach(o -> {
+                client.addParam(o.getFieldName(), o.getValue());
+            });
+        }
+        String post = client.get();
+
+        return post;
     }
 }

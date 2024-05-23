@@ -33,4 +33,12 @@ public enum InterfaceStatusEnum {
         return desc;
     }
 
+    public static boolean isOff(String code){
+        return OFF.code.equals(code);
+    }
+
+    public static boolean isOn(String code){
+        return ON.code.equals(code);
+    }
+
 }

@@ -13,11 +13,10 @@ import com.hry.gloryapi.common.common.PageResponse;
 import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.TestInvokeRequest;
 import com.hry.gloryapi.common.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.common.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.common.service.InnerUserInterfaceInvokeService;
-import com.hry.gloryapisdk.client.BasicClient;
-import com.hry.gloryapisdk.client.GeneralClientBuild;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -139,16 +138,10 @@ public class InterfaceInfoController {
         return ResultUtils.success("ok");
     }
 
-    @GetMapping("/test")
-    public BaseResponse<String> test(HttpServletRequest request){
-        GeneralClientBuild clientBuild = new GeneralClientBuild();
-        BasicClient client = clientBuild.ak("5fa29e07dd817a839d9d3c78442391a1").sk("56770f8cf6b9d00bd01a9a896938e232").domain("127.0.0.1:9009").build();
-        client.uri("/api/interface/basic/randomNum");
-        client.addParam("min",1);
-        client.addParam("max",2);
+    @PostMapping("/testInvoke")
+    public BaseResponse<String> onlineTest(@RequestBody TestInvokeRequest testInvokeRequest, HttpServletRequest request){
 
-        String post = client.get();
-        return ResultUtils.success(post);
+        return ResultUtils.success(interfaceInfoService.onlineTest(testInvokeRequest));
 //        boolean b = innerUserInterfaceInvokeService.afterInvoke("1", "1", 2);
 //        return ResultUtils.success(b);
     }

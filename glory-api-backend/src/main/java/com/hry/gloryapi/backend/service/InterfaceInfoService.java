@@ -7,6 +7,7 @@ import com.hry.gloryapi.common.common.PageResponse;
 import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.hry.gloryapi.common.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.hry.gloryapi.common.model.dto.interfaceinfo.TestInvokeRequest;
 import com.hry.gloryapi.common.model.entity.InterfaceInfo;
 import com.hry.gloryapi.common.model.vo.InterfaceInfoVo;
 
@@ -66,4 +67,10 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      */
     InterfaceInfoVo toInterfaceInfoVo(InterfaceInfo interfaceInfo);
 
+    /**
+     * 在线调试
+     * @param testInvokeRequest
+     * @return
+     */
+    String onlineTest(TestInvokeRequest testInvokeRequest);
 }
