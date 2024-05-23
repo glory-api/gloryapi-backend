@@ -22,7 +22,7 @@ public class InterfaceInfoVo implements Serializable {
     /**
      * 主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 名称
@@ -65,7 +65,7 @@ public class InterfaceInfoVo implements Serializable {
     private String responseExample;
 
     /**
-     * 接口状态（0-未审批，1-关闭，2-开启）
+     * 接口状态（0-关闭，1-开启）
      */
     private Integer status;
 

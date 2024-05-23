@@ -73,4 +73,11 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      * @return
      */
     String onlineTest(TestInvokeRequest testInvokeRequest);
+
+    /**
+     * 根据ID获取VO
+     * @param idRequest
+     * @return
+     */
+    InterfaceInfoVo getInterfaceInfoVoById(String idRequest);
 }

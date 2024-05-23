@@ -59,10 +59,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public String addInterfaceInfo(InterfaceInfoAddRequest interfaceInfoAddRequest) {
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         BeanUtil.copyProperties(interfaceInfoAddRequest, interfaceInfo, "requestParams", "responseParams");
-        interfaceInfo.setRequestParams(GSON.toJson(interfaceInfoAddRequest.getRequestParams(), new TypeToken<List<InterfaceRequestParam>>() {
-        }.getType()));
-        interfaceInfo.setResponseParams(GSON.toJson(interfaceInfoAddRequest.getResponseParams(), new TypeToken<List<InterfaceRequestParam>>() {
-        }.getType()));
+        converParams(interfaceInfo, interfaceInfoAddRequest.getRequestParams(), interfaceInfoAddRequest.getResponseParams());
         interfaceInfo.setUserid(UserContext.getLoginUser().getId());
         baseMapper.insert(interfaceInfo);
         return interfaceInfo.getId();
@@ -96,13 +93,21 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         ThrowUtils.throwIf(Objects.isNull(oldInterfaceInfo), ErrorCode.NOT_FOUND_ERROR);
         InterfaceInfo newInterfaceInfo = new InterfaceInfo();
         BeanUtil.copyProperties(interfaceInfoUpdateRequest, newInterfaceInfo, "requestParams", "responseParams");
-        newInterfaceInfo.setRequestParams(GSON.toJson(interfaceInfoUpdateRequest.getRequestParams(), new TypeToken<List<InterfaceRequestParam>>() {
-        }.getType()));
-        newInterfaceInfo.setResponseParams(GSON.toJson(interfaceInfoUpdateRequest.getResponseParams(), new TypeToken<List<InterfaceRequestParam>>() {
-        }.getType()));
+        converParams(newInterfaceInfo, interfaceInfoUpdateRequest.getRequestParams(), interfaceInfoUpdateRequest.getResponseParams());
         int result = baseMapper.updateById(newInterfaceInfo);
         ThrowUtils.throwIf(result <= 0, ErrorCode.SYSTEM_ERROR, "更新接口信息失败，数据库错误");
         return result;
+    }
+
+    private void converParams(InterfaceInfo source, List<InterfaceRequestParam> requestList, List<InterfaceResponseParam> responseParamList) {
+        if (!CollectionUtils.isEmpty(requestList)) {
+            source.setRequestParams(GSON.toJson(requestList, new TypeToken<List<InterfaceRequestParam>>() {
+            }.getType()));
+        }
+        if (!CollectionUtils.isEmpty(requestList)) {
+            source.setResponseParams(GSON.toJson(responseParamList, new TypeToken<List<InterfaceResponseParam>>() {
+            }.getType()));
+        }
     }
 
     @Override
@@ -214,5 +219,12 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String post = client.get();
 
         return post;
+    }
+
+    @Override
+    public InterfaceInfoVo getInterfaceInfoVoById(String id) {
+        InterfaceInfo interfaceInfo = baseMapper.selectById(id);
+        ThrowUtils.throwIf(Objects.isNull(interfaceInfo), ErrorCode.NOT_FOUND_ERROR);
+        return toInterfaceInfoVo(interfaceInfo);
     }
 }

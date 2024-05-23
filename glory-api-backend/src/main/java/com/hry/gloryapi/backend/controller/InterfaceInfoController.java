@@ -146,4 +146,10 @@ public class InterfaceInfoController {
 //        return ResultUtils.success(b);
     }
 
+    @ApiOperation("获取接口详情")
+    @GetMapping("/vo/{id}")
+    public BaseResponse<InterfaceInfoVo> getVoById(@PathVariable String id) {
+        return ResultUtils.success(interfaceInfoService.getInterfaceInfoVoById(id));
+    }
+
 }
