@@ -75,6 +75,16 @@ public class InterfaceInfoVo implements Serializable {
     private String method;
 
     /**
+     * 积分
+     */
+    private Integer integral;
+
+    /**
+     * 网关
+     */
+    private String gateway;
+
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

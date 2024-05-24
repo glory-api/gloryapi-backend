@@ -79,4 +79,25 @@ public class InterfaceInfoAddRequest implements Serializable {
     @NotBlank(message = "请求类型不能为空")
     private String method;
 
+    /**
+     * 网关
+     */
+    @ApiModelProperty(value = "网关")
+    @NotBlank(message = "网关不能为空")
+    private String gateway;
+
+    /**
+     * 域名
+     */
+    @ApiModelProperty(value = "域名")
+    @NotBlank(message = "域名不能为空")
+    private String domain;
+
+    /**
+     * 积分
+     */
+    @ApiModelProperty(value = "积分")
+    @NotBlank(message = "积分不能为空")
+    private Integer integral;
+
 }

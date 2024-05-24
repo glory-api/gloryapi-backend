@@ -37,6 +37,11 @@ public class InterfaceInfo implements Serializable {
     private String domain;
 
     /**
+     * 网关
+     */
+    private String gateway;
+
+    /**
      * 接口地址
      */
     private String url;
