@@ -304,11 +304,15 @@ public class UserController {
         return ResultUtils.success(true);
     }
 
-    @GetMapping("/test")
-    public BaseResponse<String> test(){
-        System.out.println("2");
-        String userName1 = UserContext.getLoginUser().getUserName();
-        String userName2 = UserContext.getLoginUser().getUserName();
-        return ResultUtils.success(userName1);
-    }
+//    /**
+//     * 签到
+//     * @return
+//     */
+//    @PostMapping("/sign")
+//    public BaseResponse<Boolean> sign(){
+//
+//    }
+
+
+
 }

@@ -117,11 +117,10 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
 
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             //请求转发调用完成后
-            log.info("请求结束 {}", exchange.getResponse().getStatusCode().value());
-
             if(exchange.getResponse().getStatusCode().equals(HttpStatus.OK)){
-                //调用成功，接口调用次数+1,yong
+                //调用成, 接口调用次数+1, 用户积分扣减
                 boolean result = innerUserInterfaceInvokeService.afterInvoke(userVo.getId(), interfaceInfo.getId(), interfaceInfo.getIntegral());
+                log.info("{}接口调用次数增加，用户积分扣减", interfaceInfo.getId());
             }
         }));
     }

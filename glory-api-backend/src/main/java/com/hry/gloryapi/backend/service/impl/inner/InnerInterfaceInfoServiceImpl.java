@@ -19,6 +19,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author huangry
@@ -42,8 +43,8 @@ public class InnerInterfaceInfoServiceImpl implements InnerInterfaceInfoService 
         }
         LambdaQueryWrapper<InterfaceInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(InterfaceInfo::getUrl,url).eq(InterfaceInfo::getMethod,method);
-        InterfaceInfo interfaceInfo = interfaceInfoService.getOne(wrapper);
-        return interfaceInfo;
+        List<InterfaceInfo> list = interfaceInfoService.list(wrapper);
+        return list.isEmpty() ? null : list.get(0);
     }
 
 }

@@ -29,7 +29,7 @@ public class SimpleInterfaceController {
      */
     @GetMapping("/randomNum")
     public BaseResponse<Long> getRandomNum(@RequestParam long min, @RequestParam long max){
-        ThrowUtils.throwIf(max<=min, new BusinessException(ErrorCode.PARAMS_ERROR,"最大值小于等于最小值"));
+        ThrowUtils.throwIf(max<=min, new BusinessException(ErrorCode.PARAMS_ERROR,"最大值不能小于等于最小值"));
         SecureRandom random = new SecureRandom("RandomNum".getBytes(StandardCharsets.UTF_8));
 //        throw new BusinessException(ErrorCode.OPERATION_ERROR,"测试");
         return ResultUtils.success(random.nextLong(min,max+1));

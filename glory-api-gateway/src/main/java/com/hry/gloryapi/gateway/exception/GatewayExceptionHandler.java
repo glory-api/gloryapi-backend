@@ -3,6 +3,7 @@ package com.hry.gloryapi.gateway.exception;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
 import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.glory.common.utils.ResultUtils;
@@ -42,7 +43,7 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
             return Mono.error(ex);
         }
         DataBufferFactory bufferFactory = response.bufferFactory();
-        int bodyCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        int bodyCode;
         String errorMsg = "";
         //如果是业务异常，修改响应状态码为无权限，返回业务异常异常信息
         if(ex instanceof BusinessException){
@@ -51,10 +52,11 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
             errorMsg = ex.getMessage();
         }else {
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-            errorMsg = "系统异常,请联系管理员";
+            bodyCode = ErrorCode.SYSTEM_ERROR.getCode();
+            errorMsg = "接口异常稍后重试";
         }
 
-        log.error("【网关异常】：⬇\n{}", Throwables.getStackTraceAsString(ex));
+        log.error("[网关异常处理]-->{}", Throwables.getStackTraceAsString(ex));
 
         BaseResponse<Boolean> error = ResultUtils.error(bodyCode, errorMsg);
 

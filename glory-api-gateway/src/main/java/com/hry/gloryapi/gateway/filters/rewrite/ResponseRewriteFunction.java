@@ -22,8 +22,13 @@ public class ResponseRewriteFunction implements RewriteFunction<byte[],byte[]> {
     public Publisher<byte[]> apply(ServerWebExchange serverWebExchange, byte[] bytes) {
 
         if(!serverWebExchange.getResponse().getStatusCode().equals(HttpStatus.OK)){
-            log.error("接口响应内容----->{}",new String(bytes, StandardCharsets.UTF_8));
-            throw new ApiBusinessException(ErrorCode.OPERATION_ERROR,"接口调用失败");
+            //请求服务的返回响应
+            //打印调用异常时的响应内容
+            log.error("转发服务的响应内容----->{}",new String(bytes, StandardCharsets.UTF_8));
+            if(serverWebExchange.getResponse().getStatusCode().series().equals(HttpStatus.Series.CLIENT_ERROR)){
+                throw new ApiBusinessException(ErrorCode.OPERATION_ERROR,"接口服务异常");
+            }
+//            throw new ApiBusinessException(ErrorCode.OPERATION_ERROR,"接口调用失败");
         }
         return Mono.just(bytes);
     }

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: huangry
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 public class TestInvokeRequest implements Serializable {
     private String interfaceId;
-    private List<Field> requestParams;
+    private Map<String,Object> requestParams;
 
     @Data
     public static class Field {

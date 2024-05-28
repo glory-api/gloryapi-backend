@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -193,7 +194,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         }
 
         /*
-        防止恶意刷接口，导致接口超调，积分超扣的问题，加锁
+        防止恶意刷在线调用接口，导致积分超扣的问题，加锁
          */
 
         //校验用户积分是否充足
@@ -207,18 +208,17 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
 
         //使用SDK
-        List<TestInvokeRequest.Field> fileds = testInvokeRequest.getRequestParams();
+        Map<String, Object> fileds = testInvokeRequest.getRequestParams();
         GeneralClientBuild clientBuild = new GeneralClientBuild("127.0.0.1:9009",loginUser.getAccessKey(),loginUser.getSecretKey());
         BasicClient client = clientBuild.build();
-        client.uri("/api/interface/basic/randomNum");
+        client.uri(interfaceInfo.getUrl());
         if(!CollectionUtils.isEmpty(fileds)){
-            fileds.forEach(o -> {
-                client.addParam(o.getFieldName(), o.getValue());
-            });
+            client.addParams(fileds);
         }
-        String post = client.get();
 
-        return post;
+        String result = interfaceInfo.getMethod().equals("GET") ? client.get() : client.post();
+
+        return result;
     }
 
     @Override
