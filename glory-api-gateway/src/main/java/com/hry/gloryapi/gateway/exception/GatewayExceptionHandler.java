@@ -53,9 +53,10 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         }else {
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
             bodyCode = ErrorCode.SYSTEM_ERROR.getCode();
-            errorMsg = "接口异常稍后重试";
+            errorMsg = "接口服务异常";
         }
 
+//        log.error("[网关异常处理]");
         log.error("[网关异常处理]-->{}", Throwables.getStackTraceAsString(ex));
 
         BaseResponse<Boolean> error = ResultUtils.error(bodyCode, errorMsg);

@@ -9,12 +9,20 @@ import com.hry.gloryapi.common.model.entity.UserInterfaceInvokeEntity;
 */
 public interface InnerUserInterfaceInvokeService{
     /**
-     * 接口调用后信息维护
+     * 接口调用成功后信息维护
      * @param userId
      * @param interfaceId
      * @return
      */
-    boolean afterInvoke(String userId, String interfaceId, Integer reduceScore);
+    boolean afterInvokeSuccess(String userId, String interfaceId, Long reduceScore);
+
+    /**
+     * 接口调用失败后信息维护
+     * @param userId
+     * @param interfaceId
+     * @return
+     */
+    boolean afterInvokeFailed(String userId, String interfaceId, Long increaseScore);
 
     /**
      * 根据用户id和接口id 获取用户调用接口信息

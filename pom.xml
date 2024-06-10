@@ -29,11 +29,17 @@
         <knife4j-openapi2.version>4.3.0</knife4j-openapi2.version>
         <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <mybatis.version>2.2.2</mybatis.version>
+        <redisson.version>3.22.0</redisson.version>
     </properties>
     
     
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

@@ -10,7 +10,11 @@ import com.hry.glory.common.exception.BusinessException;
 import com.hry.gloryapi.backend.constant.CommonConstant;
 import com.hry.gloryapi.backend.mapper.UserMapper;
 import com.hry.gloryapi.backend.model.dto.user.UserQueryRequest;
+import com.hry.gloryapi.backend.model.entity.DailyCheckInEntity;
 import com.hry.gloryapi.backend.model.vo.LoginUserVo;
+import com.hry.gloryapi.backend.service.DailyCheckInService;
+import com.hry.gloryapi.backend.utils.SpringContextUtils;
+import com.hry.gloryapi.backend.utils.UserContext;
 import com.hry.gloryapi.common.model.vo.UserVo;
 import com.hry.gloryapi.backend.service.UserService;
 import com.hry.gloryapi.backend.utils.SqlUtils;
@@ -19,14 +23,21 @@ import com.hry.gloryapi.common.model.enums.UserRoleEnum;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +53,12 @@ import static com.hry.gloryapi.backend.constant.UserConstant.USER_LOGIN_STATE;
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private DailyCheckInService dailyCheckInService;
+    @Resource
+    private RedissonClient redissonClient;
 
     /**
      * 盐值，混淆密码
@@ -264,16 +281,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean increaseIntegral(String userId, Integer increaseScore) {
+    public boolean increaseIntegral(String userId, Long increaseScore) {
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(User::getId, userId);
         wrapper.setSql("integral = integral + {0}",increaseScore);
         return update(wrapper);
     }
 
-    @Transactional
     @Override
-    public boolean reduceIntegral(String userId, Integer reduceScore) {
+    public boolean reduceIntegral(String userId, Long reduceScore) {
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(User::getId, userId);
         wrapper.setSql("integral = integral - {0}",reduceScore);
@@ -304,4 +320,117 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             sortField);
         return queryWrapper;
     }
+
+    @Override
+    public String sign() {
+        //获取当前登录用户
+//        User loginUser = UserContext.getLoginUser();
+//        synchronizedSign();
+//        redisSign();
+        redissonSign();
+        //计算当前实际按
+        //根据 user 账户和当天日期，组合形成key，
+//        redisTemplate.opsForValue().setIfAbsent(,"1")
+
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public Boolean saveCheckInLogAndIncreaseIntegral(String userId){
+        DailyCheckInEntity entity = new DailyCheckInEntity();
+        entity.setUserId(userId);
+        Long integral = 10L;
+        entity.setAddPoints(integral);
+        dailyCheckInService.save(entity);
+        increaseIntegral(userId,integral);
+        return true;
+    }
+
+    //同步锁
+    public String synchronizedSign(){
+        //获取当前登录用户
+//        User loginUser = UserContext.getLoginUser();
+        User loginUser = new User();
+        loginUser.setId("1716702178614874113");
+        loginUser.setUserAccount("admin");
+
+        synchronized (loginUser.getUserAccount().intern()){
+            //查询数据库当前用户是否存在签到记录
+            LocalDateTime beginTime = LocalDate.now().atStartOfDay();
+            LocalDateTime endTime = LocalDate.now().plusDays(1).atStartOfDay();
+            List<DailyCheckInEntity> dailyCheckInDatas = dailyCheckInService.listByUserIdAndTime(loginUser.getId(), beginTime, endTime);
+            if(dailyCheckInDatas.isEmpty()){
+                //未签到，添加签到记录，增加用户积分
+                SpringContextUtils.getBean(UserService.class).saveCheckInLogAndIncreaseIntegral(loginUser.getId());
+                return "success";
+            }else {
+                throw new BusinessException(ErrorCode.OPERATION_ERROR,"请勿重复签到");
+            }
+
+        }
+    }
+
+
+    //redis
+    public String redisSign(){
+        //获取当前登录用户
+//        User loginUser = UserContext.getLoginUser();
+        User loginUser = new User();
+        loginUser.setId("1716702178614874113");
+        loginUser.setUserAccount("admin");
+
+        //用户唯一标识+当前日期 做key
+        String key = loginUser.getId()+LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        Duration exp = Duration.between(LocalDateTime.now(), LocalDate.now().plusDays(1).atStartOfDay());
+        Boolean ifAbsent = stringRedisTemplate.opsForValue().setIfAbsent(key, "1" ,exp);
+        if(ifAbsent){
+            //今天还未签到
+            SpringContextUtils.getBean(UserService.class).saveCheckInLogAndIncreaseIntegral(loginUser.getId());
+            return "success";
+        }
+        throw new BusinessException(ErrorCode.OPERATION_ERROR,"请勿重复签到");
+    }
+
+    //redisson
+    public String redissonSign(){
+//        User loginUser = UserContext.getLoginUser();
+        User loginUser = new User();
+        loginUser.setId("1716702178614874113");
+        loginUser.setUserAccount("admin");
+
+        //用户唯一标识 作为锁标识
+        String lockKey = loginUser.getId();
+        RLock lock = redissonClient.getLock(lockKey);
+
+        try {
+            if(lock.tryLock()){
+                //查询数据库当前用户是否存在签到记录
+                LocalDateTime beginTime = LocalDate.now().atStartOfDay();
+                LocalDateTime endTime = LocalDate.now().plusDays(1).atStartOfDay();
+                List<DailyCheckInEntity> dailyCheckInDatas = dailyCheckInService.listByUserIdAndTime(loginUser.getId(), beginTime, endTime);
+                if(dailyCheckInDatas.isEmpty()){
+                    //未签到，添加签到记录，增加用户积分
+                    SpringContextUtils.getBean(UserService.class).saveCheckInLogAndIncreaseIntegral(loginUser.getId());
+                    return "success";
+                }else {
+                    throw new BusinessException(ErrorCode.OPERATION_ERROR,"请勿重复签到");
+                }
+            }
+            log.error("获取锁失败");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR,"签到失败");
+        } catch (Exception e) {
+            if(!(e instanceof BusinessException)){
+                log.error("签到失败",e);
+                throw new BusinessException(ErrorCode.OPERATION_ERROR,"签到失败");
+            }
+            throw e;
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                log.error("unLock: " + Thread.currentThread().getId());
+                lock.unlock();
+            }
+        }
+    }
+
 }

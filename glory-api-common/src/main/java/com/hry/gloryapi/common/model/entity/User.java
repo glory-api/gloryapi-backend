@@ -79,7 +79,7 @@ public class User implements Serializable {
     /**
      * 用户积分
      */
-    private Integer integral = 0;
+    private Long integral = 0L;
 
     /**
      * 创建时间

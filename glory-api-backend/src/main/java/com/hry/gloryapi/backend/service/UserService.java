@@ -120,12 +120,12 @@ public interface UserService extends IService<User> {
     List<UserVo> getUserVO(List<User> userList);
 
     /**
-     * 减少用户积分
+     * 增加用户积分
      * @param userId
      * @param increaseScore
      * @return
      */
-    boolean increaseIntegral(String userId, Integer increaseScore);
+    boolean increaseIntegral(String userId, Long increaseScore);
 
     /**
      * 减少用户积分
@@ -133,7 +133,7 @@ public interface UserService extends IService<User> {
      * @param reduceScore
      * @return
      */
-    boolean reduceIntegral(String userId, Integer reduceScore);
+    boolean reduceIntegral(String userId, Long reduceScore);
 
     /**
      * 获取查询条件
@@ -143,4 +143,15 @@ public interface UserService extends IService<User> {
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
+    /**
+     * 当前登录用户签到
+     * @return
+     */
+    String sign();
+
+    /**
+     * 签到记录 并增加积分
+     * @param userId
+     */
+    Boolean saveCheckInLogAndIncreaseIntegral(String userId);
 }

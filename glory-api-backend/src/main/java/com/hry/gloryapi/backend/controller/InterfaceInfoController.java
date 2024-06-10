@@ -17,13 +17,17 @@ import com.hry.gloryapi.common.model.dto.interfaceinfo.TestInvokeRequest;
 import com.hry.gloryapi.common.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.common.model.vo.InterfaceInfoVo;
 import com.hry.gloryapi.common.service.InnerUserInterfaceInvokeService;
+import com.hry.gloryapisdk.client.BasicClient;
+import com.hry.gloryapisdk.client.build.GeneralClientBuild;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * api平台接口信息管理 接口
@@ -138,11 +142,12 @@ public class InterfaceInfoController {
         return ResultUtils.success("ok");
     }
 
+    @ApiOperation("在线调用")
     @PostMapping("/testInvoke")
     public BaseResponse<String> onlineTest(@RequestBody TestInvokeRequest testInvokeRequest, HttpServletRequest request){
 
         return ResultUtils.success(interfaceInfoService.onlineTest(testInvokeRequest));
-//        boolean b = innerUserInterfaceInvokeService.afterInvoke("1", "1", 2);
+//        boolean b = innerUserInterfaceInvokeService.afterInvokeSuccess("1", "1", 2);
 //        return ResultUtils.success(b);
     }
 
@@ -150,6 +155,23 @@ public class InterfaceInfoController {
     @GetMapping("/vo/{id}")
     public BaseResponse<InterfaceInfoVo> getVoById(@PathVariable String id) {
         return ResultUtils.success(interfaceInfoService.getInterfaceInfoVoById(id));
+    }
+
+    @ApiOperation("在线调用")
+    @PostMapping("/test")
+    public BaseResponse<String> test(){
+
+        GeneralClientBuild clientBuild = new GeneralClientBuild("127.0.0.1:9009","5fa29e07dd817a839d9d3c78442391a1","56770f8cf6b9d00bd01a9a896938e232");
+        BasicClient client = clientBuild.build();
+        client.uri("/api/interface/basic/randomNum");
+
+        client.addParam("min","1");
+        client.addParam("max","10");
+
+        String result = client.get();
+        return ResultUtils.success(result);
+//        boolean b = innerUserInterfaceInvokeService.afterInvokeSuccess("1", "1", 2);
+//        return ResultUtils.success(b);
     }
 
 }

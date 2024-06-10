@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 /**
-* @author lenovo
-* @description 针对表【user_interface_invoke(用户接口调用表)】的数据库操作Service实现
-* @createDate 2024-05-08 16:49:40
-*/
+ * @author lenovo
+ * @description 针对表【user_interface_invoke(用户接口调用表)】的数据库操作Service实现
+ * @createDate 2024-05-08 16:49:40
+ */
 @DubboService
 public class InnerUserInterfaceInvokeServiceImpl extends ServiceImpl<UserInterfaceInvokeEntityMapper, UserInterfaceInvokeEntity> implements InnerUserInterfaceInvokeService {
 
@@ -34,36 +34,56 @@ public class InnerUserInterfaceInvokeServiceImpl extends ServiceImpl<UserInterfa
 
     @Transactional
     @Override
-    public boolean afterInvoke(String userId, String interfaceId, Integer reduceScore) {
+    public boolean afterInvokeSuccess(String userId, String interfaceId, Long reduceScore) {
         //获取用户调用接口记录信息
-        UserInterfaceInvokeEntity entity = getOneByUserIdAndInterfaceId(userId,interfaceId);
+        UserInterfaceInvokeEntity entity = getOneByUserIdAndInterfaceId(userId, interfaceId);
         boolean reduceResult = true;
-        if(entity == null){
+        if (entity == null) {
             //从未调用，新建记录
             entity = new UserInterfaceInvokeEntity();
             entity.setInterfaceId(interfaceId);
             entity.setUserId(userId);
             entity.setTotalInvokes(1L);
             reduceResult &= this.save(entity);
-        }else {
+        } else {
             //调用次数+1
             LambdaUpdateWrapper<UserInterfaceInvokeEntity> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(UserInterfaceInvokeEntity::getId, entity.getId())
                 .setSql("totalInvokes = totalInvokes + 1");
-            reduceResult &=this.update(updateWrapper);
+            reduceResult &= this.update(updateWrapper);
         }
         //用户积分-1
         reduceResult &= userService.reduceIntegral(userId, reduceScore);
-        if(!reduceResult){
-            throw new ApiBusinessException(ErrorCode.OPERATION_ERROR,"调用失败");
+        if (!reduceResult) {
+            throw new ApiBusinessException(ErrorCode.OPERATION_ERROR, "调用失败");
         }
         return reduceResult;
     }
 
     @Override
+    public boolean afterInvokeFailed(String userId, String interfaceId, Long increaseScore) {
+        //获取用户调用接口记录信息
+        UserInterfaceInvokeEntity entity = getOneByUserIdAndInterfaceId(userId, interfaceId);
+        boolean increaseResult = true;
+
+        //调用次数 - 1
+        LambdaUpdateWrapper<UserInterfaceInvokeEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(UserInterfaceInvokeEntity::getId, entity.getId())
+            .setSql("totalInvokes = totalInvokes - 1");
+        increaseResult &= this.update(updateWrapper);
+
+        //用户积分-1
+        increaseResult &= userService.increaseIntegral(userId, increaseScore);
+        if (!increaseResult) {
+            throw new ApiBusinessException(ErrorCode.OPERATION_ERROR, "调用失败");
+        }
+        return increaseResult;
+    }
+
+    @Override
     public UserInterfaceInvokeEntity getOneByUserIdAndInterfaceId(String userId, String interfaceId) {
         LambdaQueryWrapper<UserInterfaceInvokeEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(UserInterfaceInvokeEntity::getInterfaceId,interfaceId)
+        queryWrapper.eq(UserInterfaceInvokeEntity::getInterfaceId, interfaceId)
             .eq(UserInterfaceInvokeEntity::getUserId, userId);
         return this.getOne(queryWrapper);
     }

@@ -84,7 +84,7 @@ public class InterfaceInfo implements Serializable {
     /**
      * 积分
      */
-    private Integer integral;
+    private Long integral;
 
     /**
      * 创建人

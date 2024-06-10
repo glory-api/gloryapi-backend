@@ -304,14 +304,14 @@ public class UserController {
         return ResultUtils.success(true);
     }
 
-//    /**
-//     * 签到
-//     * @return
-//     */
-//    @PostMapping("/sign")
-//    public BaseResponse<Boolean> sign(){
-//
-//    }
+    /**
+     * 签到
+     * @return
+     */
+    @PostMapping("/sign")
+    public BaseResponse<String> sign(){
+        return ResultUtils.success(userService.sign());
+    }
 
 
 

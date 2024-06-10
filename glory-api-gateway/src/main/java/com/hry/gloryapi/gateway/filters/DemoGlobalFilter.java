@@ -2,10 +2,8 @@ package com.hry.gloryapi.gateway.filters;
 
 import com.hry.glory.common.enums.ErrorCode;
 import com.hry.glory.common.exception.BusinessException;
-import com.hry.glory.common.model.dto.BaseResponse;
 import com.hry.gloryapi.common.exception.ApiBusinessException;
 import com.hry.gloryapi.common.model.entity.InterfaceInfo;
-import com.hry.gloryapi.common.model.entity.User;
 import com.hry.gloryapi.common.model.entity.UserInterfaceInvokeEntity;
 import com.hry.gloryapi.common.model.enums.InterfaceStatusEnum;
 import com.hry.gloryapi.common.model.enums.UserInterfaceInvokeEnum;
@@ -18,10 +16,10 @@ import com.hry.gloryapisdk.constant.HttpHeader;
 import com.hry.gloryapisdk.util.SignUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.rpc.RpcException;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.cloud.gateway.filter.NettyWriteResponseFilter;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
@@ -31,6 +29,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -51,6 +50,8 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
     private InnerUserInterfaceInvokeService innerUserInterfaceInvokeService;
     @DubboReference
     private InnerUserService innerUserService;
+    @Resource
+    private RedissonClient redissonClient;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -71,10 +72,10 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
 
         //根据AK获取用户信息
         UserVo userVo = innerUserService.getOneByAccessKey(accessKey);
-        if(userVo == null){
+        if (userVo == null) {
             throw new ApiBusinessException(ErrorCode.FORBIDDEN_ERROR, "用户不存在");
         }
-        if(userVo.getUserRole().equals(UserRoleEnum.BAN.getValue())){
+        if (userVo.getUserRole().equals(UserRoleEnum.BAN.getValue())) {
             throw new ApiBusinessException(ErrorCode.FORBIDDEN_ERROR, "用户已禁用");
         }
         String secretKey = userVo.getSecretKey();//模拟查询获得secretKey
@@ -89,19 +90,43 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
         String method = Objects.requireNonNull(request.getMethod()).toString();
         String uri = request.getPath().value();
         InterfaceInfo interfaceInfo = interfaceInfoService.getInterfaceInfoByUrlAndMethod(uri, method);
-        if(interfaceInfo == null || interfaceInfo.getStatus().equals(InterfaceStatusEnum.OFF.getCode())){
-            throw new ApiBusinessException(ErrorCode.NOT_FOUND_ERROR,"请求接口不存在");
+        if (interfaceInfo == null || interfaceInfo.getStatus().equals(InterfaceStatusEnum.OFF.getCode())) {
+            throw new ApiBusinessException(ErrorCode.NOT_FOUND_ERROR, "请求接口不存在");
         }
 
         //用户是否有该接口调用权限
         UserInterfaceInvokeEntity userInterfaceInvoke = innerUserInterfaceInvokeService.getOneByUserIdAndInterfaceId(userVo.getId(), interfaceInfo.getId());
-        if(userInterfaceInvoke != null && userInterfaceInvoke.getStatus().equals(UserInterfaceInvokeEnum.OFF.getCode())){
-            throw new ApiBusinessException(ErrorCode.FORBIDDEN_ERROR,"无接口调用权限");
+        if (userInterfaceInvoke != null && userInterfaceInvoke.getStatus().equals(UserInterfaceInvokeEnum.OFF.getCode())) {
+            throw new ApiBusinessException(ErrorCode.FORBIDDEN_ERROR, "无接口调用权限");
         }
 
-        //用户积分是否充足
-        if(userVo.getIntegral() <= 0) {
-            throw new ApiBusinessException(ErrorCode.OPERATION_ERROR,"积分不足");
+        RLock lock = redissonClient.getLock(userVo.getId());
+
+        try {
+            if(lock.tryLock()){
+                UserVo userVo2 = innerUserService.getOneByAccessKey(accessKey);
+
+                //用户积分是否充足
+                if (userVo2.getIntegral().compareTo(0L) <= 0) {
+                    throw new ApiBusinessException(ErrorCode.OPERATION_ERROR, "积分不足");
+                }
+
+                boolean result = innerUserInterfaceInvokeService.afterInvokeSuccess(userVo.getId(), interfaceInfo.getId(), interfaceInfo.getIntegral());
+                log.info("{}积分充足，调用次数增加，用户积分扣减", userVo2.getUserName());
+            }else {
+                throw new ApiBusinessException(ErrorCode.OPERATION_ERROR, "频繁调用");
+            }
+        } catch (Exception e) {
+            if(!(e instanceof BusinessException)){
+                log.error("调用失败",e);
+                throw new BusinessException(ErrorCode.OPERATION_ERROR,"调用失败");
+            }
+            throw e;
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                log.error("unLock: " + Thread.currentThread().getId());
+                lock.unlock();
+            }
         }
 
         //修改 当前匹配到的route信息
@@ -118,16 +143,16 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             //请求转发调用完成后
             if(exchange.getResponse().getStatusCode().equals(HttpStatus.OK)){
-                //调用成, 接口调用次数+1, 用户积分扣减
-                boolean result = innerUserInterfaceInvokeService.afterInvoke(userVo.getId(), interfaceInfo.getId(), interfaceInfo.getIntegral());
-                log.info("{}接口调用次数增加，用户积分扣减", interfaceInfo.getId());
+                //调用成功 返还积分
+                boolean result = innerUserInterfaceInvokeService.afterInvokeFailed(userVo.getId(), interfaceInfo.getId(), interfaceInfo.getIntegral());
+                log.info("{}接口调用失败，调用次数减少，用户积分增加", interfaceInfo.getId());
             }
         }));
     }
 
     @Override
     public int getOrder() {
-        return 0;
+        return -1;
     }
 
 

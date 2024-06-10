@@ -52,7 +52,7 @@ public class UserVo implements Serializable {
     /**
      * 用户积分
      */
-    private Integer integral;
+    private Long integral;
 
     /**
      * 创建时间
