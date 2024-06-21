@@ -44,15 +44,15 @@ import java.util.Map;
 public class CacheConfig {
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory, ResourceLoader resourceLoader) {
-        Map<String,RedisCacheConfiguration> configMap = Map.of(
-            "interfacePage",RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)).computePrefixWith(cacheName -> cacheName + ":").serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(genericJackson2JsonRedisSerializer())),
-            "",RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10))
+        Map<String, RedisCacheConfiguration> configMap = Map.of(
+            "interfacePage", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)).computePrefixWith(cacheName -> cacheName + ":").serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(genericJackson2JsonRedisSerializer())),
+            "", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10))
         );
 
         return RedisCacheManager.builder(redisConnectionFactory).withInitialCacheConfigurations(configMap).build();
     }
 
-    private GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer(){
+    private GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         // 必须设置，否则无法将JSON转化为对象，会转化成Map类型

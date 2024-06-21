@@ -98,3 +98,6 @@ dubbo:
     port: 29001
   registry:
     address: nacos://localhost:8848
+
+rocketmq:
+  name-server: 192.168.100.100:9876

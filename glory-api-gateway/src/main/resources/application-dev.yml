@@ -31,3 +31,9 @@ dubbo:
     port: 29009
   registry:
     address: nacos://localhost:8848
+
+rocketmq:
+  name-server: 192.168.100.100:9876
+  producer:
+    group: gateway-interface
+    send-message-timeout: 30000

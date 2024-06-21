@@ -16,6 +16,9 @@ import com.hry.gloryapisdk.constant.HttpHeader;
 import com.hry.gloryapisdk.util.SignUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -53,6 +56,8 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
     private InnerUserService innerUserService;
     @Resource
     private RedissonClient redissonClient;
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -120,7 +125,7 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
         } catch (Exception e) {
             if(!(e instanceof BusinessException)){
                 log.error("调用失败",e);
-                throw new BusinessException(ErrorCode.OPERATION_ERROR,"调用失败");
+                throw new ApiBusinessException(ErrorCode.OPERATION_ERROR,"调用失败");
             }
             throw e;
         } finally {
@@ -140,13 +145,25 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
 //
 //        Route route1 = Route.async(routeDefinition).asyncPredicate(route.getPredicate()).replaceFilters(route.getFilters()).build();
 //        exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR,route1);
-
+        exchange.getAttributes().putAll(Map.of("userId",userVo.getId(),"interfaceId",interfaceInfo.getId(),"increaseScore",interfaceInfo.getIntegral().toString()));
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             //请求转发调用完成后
             if(!exchange.getResponse().getStatusCode().equals(HttpStatus.OK)){
                 //调用失败 返还积分
-                boolean result = innerUserInterfaceInvokeService.afterInvokeFailed(userVo.getId(), interfaceInfo.getId(), interfaceInfo.getIntegral());
-                log.info("{}接口调用失败，调用次数减少，用户积分增加", interfaceInfo.getId());
+                String msg = String.join(";", exchange.getAttribute("userId"), exchange.getAttribute("interfaceId"), exchange.getAttribute("increaseScore"));
+                //如果exchange携带用户和接口信息，那么说明需要回补积分
+                //使用MQ异步回补
+                rocketMQTemplate.asyncSend("afterInvoke", msg, new SendCallback() {
+                    @Override
+                    public void onSuccess(SendResult sendResult) {
+                        log.info("异步消息发送成功");
+                    }
+
+                    @Override
+                    public void onException(Throwable e) {
+                        log.error("异步发送消息失败：原因{},消息内容{}",e.getMessage(),msg);
+                    }
+                });
             }
         }));
     }
