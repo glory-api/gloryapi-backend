@@ -46,6 +46,8 @@ spring:
     session:
       cookie:
         max-age: 86400
+  cache:
+    type: redis
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false

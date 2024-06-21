@@ -30,6 +30,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -124,7 +125,7 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
             throw e;
         } finally {
             if (lock.isHeldByCurrentThread()) {
-                log.error("unLock: " + Thread.currentThread().getId());
+                log.info("unLock:{}-{}",Thread.currentThread().getName(),Thread.currentThread().getId());
                 lock.unlock();
             }
         }
@@ -142,8 +143,8 @@ public class DemoGlobalFilter implements GlobalFilter, Ordered {
 
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             //请求转发调用完成后
-            if(exchange.getResponse().getStatusCode().equals(HttpStatus.OK)){
-                //调用成功 返还积分
+            if(!exchange.getResponse().getStatusCode().equals(HttpStatus.OK)){
+                //调用失败 返还积分
                 boolean result = innerUserInterfaceInvokeService.afterInvokeFailed(userVo.getId(), interfaceInfo.getId(), interfaceInfo.getIntegral());
                 log.info("{}接口调用失败，调用次数减少，用户积分增加", interfaceInfo.getId());
             }
